@@ -1,0 +1,73 @@
+{
+  "poblacion": {
+    "postulaciones": 48059,
+    "personas": 39327,
+    "con_historial": 43271,
+    "pct_historial": 90.0,
+    "ausentes": 1231,
+    "analizables": 42156,
+    "personas_analizables": 34648,
+    "tasa_ingreso": 11.49,
+    "ingresantes": 4843
+  },
+  "predictores": {
+    "numericos": 30,
+    "categoricos": 26
+  },
+  "hiperparametros": {
+    "max_depth": 3,
+    "learning_rate": 0.02,
+    "n_estimators": 800,
+    "min_child_weight": 40,
+    "colsample_bytree": 0.5,
+    "subsample": 0.8,
+    "reg_lambda": 10
+  },
+  "h1": {
+    "auc": 0.7538128118313427,
+    "ic_inf": 0.7473191846981218,
+    "ic_sup": 0.7606382049492647,
+    "t": -45.430358543619725,
+    "p": 0.9999992980032809,
+    "auc_media": 0.7539438094651079,
+    "auc_de": 0.004727855526155773,
+    "aucpr": 0.2920385019283414,
+    "t_vs_lr": -2.9866594552235832,
+    "p_vs_lr": 0.040471479281059194,
+    "mejora_vs_lr": -0.0014008847115785095
+  },
+  "confusion": {
+    "VN": 30857,
+    "FP": 6456,
+    "FN": 2387,
+    "VP": 2456,
+    "umbral": 0.6124021410942078
+  },
+  "equidad": {
+    "chi2": 18.40456693972148,
+    "p": 1.7862933978391957e-05,
+    "brecha_tfn": 7.108957926233231
+  },
+  "calibracion": {
+    "brier_sin": 0.19355897034076652,
+    "brier_con": 0.09157710987559643,
+    "media_sin": 0.40616214636259756,
+    "media_con": 0.1148828162064712,
+    "tasa": 0.1148828162064712
+  },
+  "corpus": {
+    "pares": 34648,
+    "coherencia_top1": 100.0,
+    "vocab": 243,
+    "top1_distintos": 18
+  },
+  "ejemplo_par": {
+    "id": "PF41399A12686",
+    "area": "BIOMÉDICAS",
+    "area_colegio": "URBANA",
+    "sexo": "Masculino",
+    "instruction": "Perfil del postulante: procede de un colegio público de área urbana (UGEL MELGAR); promedio de secundaria con desempeño satisfactorio; mayor fortaleza en Matemática y menor en Ciencia y Tecnología; postulaciones anteriores: 0; preparación preuniversitaria: ninguna; área de interés: biomédicas. Probabilidades estimadas de ingreso: BIOLOGÍA: ECOLOGÍA 6.8 %; BIOLOGÍA: PESQUERÍA 6.8 %; MEDICINA VETERINARIA Y ZOOTECNIA 5.4 %. Genera una ruta educativa personalizada.",
+    "output": "Ruta educativa sugerida. Primera opción recomendada: BIOLOGÍA: ECOLOGÍA, con la mayor probabilidad estimada de ingreso (6.8 %). Alternativas: BIOLOGÍA: PESQUERÍA (6.8 %) y MEDICINA VETERINARIA Y ZOOTECNIA (5.4 %). Tu fortaleza en Matemática es coherente con estas opciones. Para mejorar tus posibilidades, refuerza Ciencia y Tecnología antes del examen y considera una preparación preuniversitaria estructurada. Estas probabilidades son estimaciones orientativas basadas en postulantes con perfiles similares, no una garantía de resultado.",
+    "top1": "BIOLOGÍA: ECOLOGÍA"
+  }
+}

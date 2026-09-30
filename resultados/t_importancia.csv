@@ -1,0 +1,57 @@
+variable,ganancia,ganancia_rel,etiqueta
+promedio_5to,323.1109313964844,11.087469951132247,Promedio de 5.° de secundaria
+promedio_secundaria,216.7004547119141,7.436021336792146,Promedio de secundaria
+perfil_verbal,188.42428588867188,6.465731749851074,Perfil verbal
+equipamiento_tic,144.62705993652344,4.962841010164144,Equipamiento TIC del hogar
+tasa_previa,130.6172637939453,4.482098396223558,Tasa previa de ingreso del programa
+tipo_preparacion_preuniversitaria,108.89747619628906,3.736789374046016,Preparación preuniversitaria
+perfil_cuantitativo,102.89896392822266,3.530951941569697,Perfil cuantitativo
+programa_primera_opcion,80.30460357666016,2.755632176372397,Programa postulado
+tipo_proceso,67.72223663330078,2.3238714346492078,Tipo de proceso de admisión
+ciencias_sociales_media,53.33273696899414,1.8300993903228755,Ciencias Sociales
+matematica_media,51.64518356323242,1.7721914216990768,Matemática
+educacion_trabajo_media,48.451473236083984,1.6626000589685233,Educación para el Trabajo
+comunicacion_media,45.44622421264648,1.5594756982450366,Comunicación
+areas_desaprobadas_total,44.3111686706543,1.5205265541838544,areas_desaprobadas_total
+dpcc_media,41.97099304199219,1.4402240189182665,"Desarrollo Personal, Ciudadanía y Cívica"
+facultad,41.74889373779297,1.4326027374257673,facultad
+rango_ingreso_familiar,41.22624206542969,1.4146680773782363,rango_ingreso_familiar
+arte_cultura_media,41.117130279541016,1.410923934021259,arte_cultura_media
+numero_postulaciones_anteriores,40.188175201416016,1.3790470752899646,numero_postulaciones_anteriores
+tendencia_notas,38.30075073242188,1.3142805816447052,tendencia_notas
+repitio,37.34334182739258,1.281427337034318,repitio
+estudio_cepreuna_previo,37.23825454711914,1.2778212935704147,Estudió en CEPREUNA
+ugel_colegio,36.79342651367188,1.2625571320239404,ugel_colegio
+integrantes_hogar,34.82076644897461,1.1948658004536972,integrantes_hogar
+dispersion_notas,34.5219841003418,1.184613159671544,dispersion_notas
+estudio_universidad_previamente,33.60138702392578,1.153023103656578,estudio_universidad_previamente
+ie_forma_atencion_modelo_servicio,33.166603088378906,1.1381036027911131,ie_forma_atencion_modelo_servicio
+educacion_fisica_media,32.3050651550293,1.1085401463444695,educacion_fisica_media
+edad_al_examen,32.23646545410156,1.1061861649443183,edad_al_examen
+ciencia_tecnologia_media,32.03548049926758,1.0992894170140637,ciencia_tecnologia_media
+numero_hermanos,31.45782852172852,1.079467435394638,numero_hermanos
+nivel_educativo_padre,31.172365188598636,1.069671833263357,nivel_educativo_padre
+ingles_media,30.87740707397461,1.059550420104718,ingles_media
+financia_estudios,30.51251983642578,1.0470294067660826,financia_estudios
+sexo,30.47765350341797,1.0458329773606785,sexo
+ocupacion_madre,30.33229637145996,1.040845084113608,ocupacion_madre
+grados_requiere_recuperacion,30.23522186279297,1.0375139968823144,grados_requiere_recuperacion
+ocupacion_padre,29.799789428710938,1.0225722429535105,ocupacion_padre
+ie_turno,29.74513816833496,1.020696898765707,ie_turno
+servicios_basicos,29.497961044311523,1.0122150782238504,servicios_basicos
+brecha_cuanti_verbal,29.431283950805664,1.009927070611481,brecha_cuanti_verbal
+trabaja_actualmente,29.099443435668945,0.9985400472005276,trabaja_actualmente
+educacion_religiosa_media,28.938692092895508,0.9930239054999004,educacion_religiosa_media
+nivel_educativo_madre,28.80904960632324,0.9885752563376836,nivel_educativo_madre
+anios_desde_egreso,28.607105255126957,0.981645586963724,anios_desde_egreso
+area_colegio,27.94825553894043,0.9590373254636938,area_colegio
+estado_civil,27.530460357666016,0.9447007894075252,estado_civil
+tipo_vivienda,27.493200302124023,0.9434222200183254,tipo_vivienda
+ie_gestion_dependencia,26.903955459594727,0.9232024321666218,ie_gestion_dependencia
+area_programa,26.66659164428711,0.9150573528332336,area_programa
+tipo_gestion_colegio,25.76002693176269,0.8839488138388125,tipo_gestion_colegio
+grados_registrados,24.486143112182617,0.8402358125182345,grados_registrados
+se_retiro,23.757287979125977,0.8152253328307562,se_retiro
+lengua_materna,22.708595275878903,0.7792397077546557,lengua_materna
+discapacidad_conadis,20.84333610534668,0.7152338107242868,discapacidad_conadis
+area_examen,16.00230598449707,0.5491150855995629,area_examen
