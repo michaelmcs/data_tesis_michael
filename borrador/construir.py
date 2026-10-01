@@ -366,7 +366,7 @@ for it in RES:
     elif k == 'p4': nuevos.append(par('NORML4L5', it[1]))
     elif k in ('tbl3', 'tbl4'):
         nv = 'L3' if k == 'tbl3' else 'L4'
-        nuevos += [titulo('Tabla', it[1], nv), tabla(it[2], it[3], nv), nota(it[4], nv)]
+        nuevos += [titulo('Tabla', it[1], nv), tabla(it[2], it[3], nv, anchos=it[5] if len(it) > 5 else None), nota(it[4], nv)]
     elif k == 'fig4':
         nuevos += [titulo('Figura', it[1], 'L4'), figura(it[2], 'L4'), nota(it[3], 'L4')]
     elif k == 'rank':
@@ -377,6 +377,9 @@ for it in RES:
                    tabla(['Posición', 'Programa de estudios', 'Probabilidad de ingreso (%)'], filas, 'L4', anchos=[1300, 3585, 2200]),
                    nota('Postulante de un colegio ' + EJ['area_colegio'].lower() + ', seleccionado del corpus. Probabilidades '
                         'estimadas por el modelo XGBoost final y calibradas mediante regresión isotónica.', 'L4')]
+    elif k == 'tblx':
+        nuevos += [titulo('Tabla', it[1], 'L4'), tabla(it[2], it[3], 'L4', anchos=[1900, 5185], sz=20, izq_todo=True),
+                   nota(it[4], 'L4')]
     elif k == 'par':
         nuevos += [titulo('Tabla', 'Ejemplo de par de instrucción y respuesta del corpus CareER-Dataset', 'L3'),
                    tabla(['Componente', 'Contenido'], [['Instrucción', EJ['instruction']], ['Respuesta de referencia', EJ['output']]],

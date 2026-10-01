@@ -45,6 +45,10 @@ Objetivo 2. Corpus CareER-Dataset de 34 648 pares, particiones 70, 15 y 15 % agr
 
 Objetivo 4, componente de rankeo, sobre 4 843 ingresantes con validación cruzada: XGBoost MRR 0.353, NDCG@10 0.500; popularidad del programa MRR 0.362, NDCG@10 0.507; aleatorio MRR 0.299. **El XGBoost supera al azar y queda 2.5 % por debajo de la popularidad, diferencia no significativa** (Wilcoxon p = .292, r = .015): ambos métodos son equivalentes. Los textos del borrador que dependen de la significación se redactan de forma condicional según el valor p.
 
+Objetivos 3 y 4, modelo de lenguaje, ejecutado en Colab con GPU Tesla T4 y traído en `resultados_llm.zip`, ya descomprimido en `resultados/`. Qwen2.5-1.5B-Instruct con LoRA, 4 358 144 parámetros entrenables, 375 pasos, 34.8 y 28.5 minutos. Sobre 300 pares de prueba: LLM base, métrica combinada 0.342 y coherencia 0.253; LoRA sin componente tabular, 0.783 y 0.540; CareER-GPT híbrido, 1.000 y 1.000, con el 100 % de rutas idénticas a la referencia. **H3 se acepta** (binomial exacta p < .001). **H4 se acepta en la generación de rutas**: mejora de 192.2 % y 27.7 % (Wilcoxon p < .001, r = .867), pero no en el rankeo. Los valores perfectos se discuten como limitación, porque las referencias tienen estructura fija.
+
+Advertencia: esa corrida de Colab usó el corpus anterior, el del .rar, y no el regenerado. Ambos tienen las mismas 34 648 personas, particiones y perfiles; solo difieren las probabilidades del XGBoost. Para consistencia total, repetir el cuaderno de Colab con el `resultados/CareER_Dataset.jsonl` actual, reemplazar los tres archivos y regenerar el borrador; los textos se recalculan solos.
+
 Todas las cifras exactas están en `resultados/`.
 
 ## 5. Estructura de la carpeta y cómo ejecutar
@@ -72,7 +76,7 @@ python borrador/generar_borrador.py         # genera Borrador_Tesis_CareER-GPT_E
 
 Dependencias: `pip install -r requirements.txt`, con Python 3.11. Las versiones están fijadas porque pandas 3 y otras versiones de XGBoost cambian ligeramente las cifras del modelo tabular.
 
-Estado: el borrador ya se genera completo, con 14 tablas, 6 figuras y 18 ecuaciones. Solo faltan los resultados del modelo de lenguaje.
+Estado: el borrador ya se genera completo, con 18 tablas, 7 figuras y 18 ecuaciones, incluidos los resultados del modelo de lenguaje. Solo faltan las cuatro referencias de la tarea 4 y el enlace del repositorio en el Anexo 2.
 
 ## 6. Tareas pendientes, en este orden
 

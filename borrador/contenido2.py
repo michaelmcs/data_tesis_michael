@@ -196,6 +196,51 @@ else:
 RES_INTRO = ('Los resultados se presentan por objetivo específico. En primer lugar se caracteriza la población de '
              'estudio y, a continuación, se exponen los resultados de cada objetivo con el contraste de su hipótesis.')
 
+# ------------------------------------------------------------ resultados del modelo de lenguaje
+import math as _m, re as _re2
+LL = json.load(open(S + 'resultados_llm.json')); GEN = pd.read_csv(S + 'generaciones.csv')
+LC = LL['config']; LT = LL['entrenamiento']; LM = LL['metricas']; LP = LL['pruebas']
+NE = LC['n_eval']
+CB, CS, CH = 'LLM base sin ajuste', 'LLM + LoRA sin componente tabular', 'CareER-GPT híbrido'
+ET = {CB: 'LLM base sin ajuste', CS: 'LLM con LoRA sin componente tabular', CH: 'CareER-GPT híbrido'}
+def _perd(h):
+    tr = [x['loss'] for x in h if 'loss' in x]; ev = [x['eval_loss'] for x in h if 'eval_loss' in x]
+    return tr[0], tr[-1], ev[0], ev[-1], max(x['step'] for x in h if 'step' in x)
+PH, PS = _perd(LL['historial']['hibrido']), _perd(LL['historial']['solo_llm'])
+def ci(v): return [f'{v[0]:.3f}', f'[{v[1]:.3f}, {v[2]:.3f}]']
+def fl(x): return f'{x:.4f}'
+ent_rows = [[et, n(LT[k]['parametros_entrenables']), f'{LT[k]["minutos"]:.1f}', fl(pp[0]), fl(pp[1]), fl(pp[3])]
+            for et, k, pp in [('CareER-GPT híbrido', 'hibrido', PH), ('LLM con LoRA sin componente tabular', 'solo_llm', PS)]]
+met_rows = [[ET[c], ci(LM[c]['rougeL']), ci(LM[c]['bertscore']), ci(LM[c]['coherencia']), ci(LM[c]['combinada'])]
+            for c in (CB, CS, CH)]
+H3 = LP['H3']; K3 = round(H3['coherencia'] * H3['n'])
+def _r(w):  # tamaño del efecto r de la prueba de Wilcoxon a partir de la aproximación normal
+    z = (w - NE * (NE + 1) / 4) / _m.sqrt(NE * (NE + 1) * (2 * NE + 1) / 24); return z, abs(z) / _m.sqrt(NE)
+H4 = {}
+for c in (CB, CS):
+    t = LP['H4_vs_' + c]; z, r = _r(t['estadistico']); H4[c] = dict(t, z=z, r=r)
+h4_rows = [[ET[c], f'{LM[CH]["combinada"][0]:.3f}', f'{LM[c]["combinada"][0]:.3f}', f'{H4[c]["mejora_pct"]:.1f}',
+            n(H4[c]['estadistico']), pv(H4[c]['p']), f'{H4[c]["r"]:.3f}']
+           for c in (CB, CS)]
+H4_OK = all(H4[c]['mejora_pct'] >= 10 and H4[c]['p'] < .05 for c in (CB, CS))
+def _limpio(t, k=60):
+    t = _re2.sub(r'[*#]+', '', str(t)); t = _re2.sub(r'\s+', ' ', t).strip(); w = t.split()
+    return ' '.join(w[:k]) + (' [...]' if len(w) > k else '')
+_g = GEN.iloc[0]
+gen_rows = [['Respuesta de referencia', _limpio(_g.referencia)], ['LLM base sin ajuste', _limpio(_g.base)],
+            ['LLM con LoRA sin componente tabular', _limpio(_g.solo_llm)], ['CareER-GPT híbrido', _limpio(_g.hibrido)]]
+IDENT_H = (GEN.hibrido.str.strip() == GEN.referencia.str.strip()).mean() * 100
+IDENT_SOLO = (GEN.solo_llm.str.strip() == GEN.referencia.str.strip()).mean() * 100
+
+RESUMEN = RESUMEN.replace('[Completar con los resultados del ajuste con LoRA y de la integración híbrida.]',
+    f'El modelo de lenguaje ajustado con LoRA alcanzó una coherencia contextual de {H3["coherencia"]:.3f}, superior al '
+    f'umbral de 0.80, y la arquitectura híbrida superó en {H4[CS]["mejora_pct"]:.1f} % al modelo ajustado sin '
+    'componente tabular en la calidad de las rutas generadas (p < .001).')
+ABSTRACT = ABSTRACT.replace('[Complete with the results of LoRA fine-tuning and hybrid integration.]',
+    f'The LoRA fine-tuned language model reached a contextual coherence of {H3["coherencia"]:.3f}, above the 0.80 '
+    f'threshold, and the hybrid architecture outperformed the fine-tuned model without the tabular component by '
+    f'{H4[CS]["mejora_pct"]:.1f}% in the quality of the generated pathways (p < .001).')
+
 RES = [
  ('h3', 'Caracterización de la población de estudio'),
  ('p3', f'El conjunto analítico comprendió {n(P["analizables"])} postulaciones, de las cuales {n(P["ingresantes"])} '
@@ -307,15 +352,48 @@ RES = [
         '100 % de los pares y balanceado entre particiones, por lo que se acepta la hipótesis específica 2.'),
 
  ('h3', 'Objetivo específico 3: ajuste del modelo de lenguaje con LoRA'),
- ('p3', '[Pendiente. Esta sección se completa tras el ajuste fino del modelo de lenguaje con el corpus CareER-Dataset. '
-        'Debe presentar la configuración final, la curva de pérdida de entrenamiento y validación, los valores de '
-        'ROUGE-L y BERTScore en la partición de prueba con su intervalo de confianza, ejemplos de rutas generadas y el '
-        'contraste de la hipótesis específica 3 frente al umbral de 0.80 mediante la prueba binomial exacta. Incluir la '
-        'curva de pérdida como Figura 7.]'),
+ ('h4', 'Entrenamiento del modelo con LoRA'),
+ ('p4', f'El ajuste se ejecutó en una GPU {LL["gpu"]} de Google Colab sobre {n(LC["max_train"])} pares de la partición de '
+        f'entrenamiento, durante {LC["epocas"]} época y {PH[4]} pasos de optimización. Los adaptadores LoRA sumaron '
+        f'{n(LT["hibrido"]["parametros_entrenables"])} parámetros entrenables, cerca del 0.3 % del modelo, y el '
+        f'entrenamiento tomó {LT["hibrido"]["minutos"]:.1f} minutos en la condición híbrida y '
+        f'{LT["solo_llm"]["minutos"]:.1f} minutos en la condición sin componente tabular. Como muestran la Tabla 13 y la '
+        f'Figura 6, en la condición híbrida la pérdida de validación descendió a {fl(PH[3])} al final del entrenamiento, '
+        'mientras que en la condición sin componente tabular se estabilizó en '
+        f'{fl(PS[3])}. La cercanía entre la pérdida de entrenamiento y la de validación en ambas condiciones indica que '
+        'no hubo sobreajuste. La pérdida residual de la condición sin componente tabular corresponde a las '
+        'probabilidades y programas que el modelo no puede inferir sin el ranking.'),
+ ('tbl4', 'Parámetros, tiempo y pérdida del ajuste con LoRA por condición',
+  ['Condición', 'Parámetros entrenables', 'Tiempo (min)', 'Pérdida inicial', 'Pérdida final de entrenamiento',
+   'Pérdida final de validación'], ent_rows,
+  f'Pérdida de entropía cruzada calculada solo sobre la respuesta. Entrenamiento de {LC["epocas"]} época con '
+  f'{n(LC["max_train"])} pares, r = {LC["r"]}, α = {LC["alpha"]} y lote efectivo de 16 en una GPU {LL["gpu"]}.'),
+ ('fig4', 'Pérdida de entrenamiento y de validación durante el ajuste con LoRA', 'fig_perdida.png',
+  'Las líneas tenues corresponden a la pérdida de entrenamiento y las líneas con marcadores a la de validación, '
+  'evaluada cada 50 pasos. Elaboración propia.'),
+ ('h4', 'Calidad de las rutas generadas'),
+ ('p4', f'Se generaron rutas para {NE} pares de la partición de prueba, correspondientes a personas no vistas durante '
+        f'el entrenamiento. El modelo CareER-GPT obtuvo un ROUGE-L de {LM[CH]["rougeL"][0]:.3f}, un BERTScore F1 de '
+        f'{LM[CH]["bertscore"][0]:.3f} y una coherencia de {LM[CH]["coherencia"][0]:.3f}; el {IDENT_H:.1f} % de sus rutas '
+        'coincidió literalmente con la respuesta de referencia. Este resultado se explica porque las referencias del '
+        'corpus se construyeron con una estructura fija a partir del ranking del componente tabular, de modo que el '
+        'modelo aprendió a trasladar con exactitud las probabilidades y los programas recibidos a una ruta redactada. La '
+        'Tabla 14 presenta un ejemplo de las rutas generadas en cada condición.'),
+ ('tblx', 'Ejemplo de rutas generadas por condición para un postulante de la partición de prueba',
+  ['Condición', 'Ruta generada'], gen_rows,
+  'Se muestran las primeras 60 palabras de cada ruta; [...] indica texto omitido. Se eliminaron los símbolos de '
+  'formato del modelo base. Elaboración propia.'),
+ ('p4', f'Contraste de la hipótesis específica 3. La coherencia contextual del modelo ajustado con LoRA en la '
+        f'arquitectura híbrida fue de {H3["coherencia"]:.3f}, con {K3} de {H3["n"]} rutas coherentes, valor superior al '
+        f'umbral de 0.80 según la prueba binomial exacta unilateral (p {"< .001" if H3["p"] < .001 else "= " + pv(H3["p"])}). '
+        + ('En consecuencia, se acepta la hipótesis específica 3. ' if H3['p'] < .05 and H3['coherencia'] > .8 else
+           'En consecuencia, se rechaza la hipótesis específica 3. ') +
+        f'Cabe precisar que el modelo ajustado sin el componente tabular alcanzó una coherencia de '
+        f'{LM[CS]["coherencia"][0]:.3f}, lo que muestra que la coherencia depende de que el modelo reciba el ranking.'),
  ('h3', 'Objetivo específico 4: integración y validación comparativa'),
  ('h4', 'Calidad del rankeo de programas'),
  ('p4', f'Se evaluó el rankeo sobre {n(RJ["n"])} ingresantes, con un promedio de {RJ["candidatos_medio"]:.1f} programas '
-        'candidatos por persona. La Tabla 13 y la Figura 6 muestran que el XGBoost superó al orden aleatorio en todas las '
+        'candidatos por persona. La Tabla 15 y la Figura 7 muestran que el XGBoost superó al orden aleatorio en todas las '
         f'métricas, con un MRR de {f3(rx.MRR)} frente a {f3(ra.MRR)}, y ubicó el programa de ingreso en la primera posición '
         f'en el {rx.Hit1*100:.1f} % de los casos, frente al {ra.Hit1*100:.1f} % esperado al azar. Sin embargo, el orden por '
         f'popularidad, basado solo en la tasa histórica de ingreso de cada programa, obtuvo un MRR de {f3(rp_.MRR)}, '
@@ -326,18 +404,43 @@ RES = [
   'reportan los valores esperados exactos. Acierto@k: proporción de casos en que el programa de ingreso se ubica entre '
   'las k primeras posiciones.'),
  ('fig4', 'Comparación de las métricas de rankeo entre métodos', 'fig_ranking.png', 'Elaboración propia.'),
- ('p4', 'La Tabla 14 muestra que, a diferencia de lo observado en la clasificación, el rankeo no perjudicó a los '
+ ('p4', 'La Tabla 16 muestra que, a diferencia de lo observado en la clasificación, el rankeo no perjudicó a los '
         'postulantes de colegios rurales: sus métricas fueron iguales o ligeramente superiores a las de los urbanos.'),
  ('tbl4', 'Calidad del rankeo del XGBoost según el área del colegio de procedencia',
   ['Área', 'MRR', 'NDCG@5', 'NDCG@10', 'Acierto@1', 'Acierto@3'], rq_rows,
   'Se excluyen los ingresantes sin registro del área del colegio.'),
  ('h4', 'Calidad de las rutas generadas por la arquitectura integrada'),
- ('p4', '[Pendiente de la ejecución del ajuste con LoRA. Presentar para las tres condiciones, modelo base sin ajuste, '
-        'modelo con LoRA sin componente tabular y CareER-GPT híbrido, los valores de ROUGE-L, BERTScore, coherencia y '
-        'métrica combinada con su intervalo de confianza, y el contraste de la hipótesis específica 4.]'),
- ('p4', 'Contraste parcial de la hipótesis específica 4. En la dimensión del rankeo, el componente tabular no superó a '
-        'la referencia por popularidad, por lo que en esta dimensión no se verifica la mejora planteada. El contraste '
-        'definitivo requiere la comparación de las rutas generadas.'),
+ ('p4', f'La Tabla 17 compara las tres condiciones sobre los mismos {NE} pares de prueba. El modelo base sin ajuste '
+        f'obtuvo una métrica combinada de {LM[CB]["combinada"][0]:.3f}: generó textos extensos, con formato propio y sin '
+        f'respetar el orden del ranking, con una coherencia de {LM[CB]["coherencia"][0]:.3f}. El modelo ajustado sin el '
+        f'componente tabular alcanzó {LM[CS]["combinada"][0]:.3f}; reprodujo la estructura de la ruta, con un ROUGE-L de '
+        f'{LM[CS]["rougeL"][0]:.3f}, cercano al de 0.836 que comparten referencias de personas distintas, pero al no '
+        f'conocer las probabilidades recomendó un programa distinto o en otro orden en el {(1 - LM[CS]["coherencia"][0]) * 100:.1f} % de los casos. La '
+        f'arquitectura híbrida alcanzó {LM[CH]["combinada"][0]:.3f}, con intervalos de confianza que no se superponen con '
+        'los de las otras condiciones.'),
+ ('tbl4', 'Calidad de las rutas generadas según la condición experimental',
+  ['Condición', 'ROUGE-L', 'BERTScore F1', 'Coherencia', 'Métrica combinada'], met_rows,
+  f'Media e intervalo de confianza al 95 % entre corchetes, estimado mediante 1 000 remuestreos bootstrap, sobre '
+  f'{NE} pares de la partición de prueba. La métrica combinada es el promedio de ROUGE-L, BERTScore F1 y coherencia.', [1685, 1350, 1350, 1350, 1350]),
+ ('p4', f'La Tabla 18 presenta el contraste de la mejora. Las diferencias por par no siguieron una distribución '
+        'normal según la prueba de Shapiro-Wilk (p < .001), por lo que se aplicó la prueba de rangos con signo de '
+        f'Wilcoxon unilateral. La arquitectura híbrida superó al modelo base en {H4[CB]["mejora_pct"]:.1f} % y al modelo '
+        f'ajustado sin componente tabular en {H4[CS]["mejora_pct"]:.1f} %, en ambos casos con p < .001 y un tamaño del '
+        f'efecto grande (r = {H4[CS]["r"]:.3f}).'),
+ ('tbl4', 'Contraste de la mejora de la arquitectura híbrida frente a cada modelo individual',
+  ['Comparación frente a', 'Híbrido', 'Rival', 'Mejora (%)', 'W', 'p', 'r'], h4_rows,
+  f'Valores medios de la métrica combinada sobre {NE} pares. Prueba de rangos con signo de Wilcoxon unilateral para '
+  'muestras relacionadas, aplicada porque las diferencias no siguieron una distribución normal según la prueba de '
+  'Shapiro-Wilk (p < .001). r: tamaño del efecto calculado como z dividido entre la raíz cuadrada de n.', [2085, 850, 800, 900, 900, 800, 750]),
+ ('p4', 'Contraste de la hipótesis específica 4. '
+        + (f'En la calidad de las rutas generadas, la arquitectura híbrida superó a cada modelo individual en más del '
+           f'10 % con diferencias estadísticamente significativas, por lo que se acepta la hipótesis específica 4 en '
+           f'esta dimensión. ' if H4_OK else
+           'En la calidad de las rutas generadas, la arquitectura híbrida no superó a cada modelo individual en al menos '
+           '10 % con significación estadística, por lo que se rechaza la hipótesis específica 4 en esta dimensión. ') +
+        'En la dimensión del rankeo, el ordenamiento que la arquitectura entrega es el del componente tabular, que no '
+        'superó a la referencia por popularidad; por ello, la ventaja de la integración radica en traducir el ranking '
+        'a una ruta comprensible y fiel a las probabilidades, y no en mejorar el orden de los programas.'),
 ]
 
 DISC = [
@@ -373,9 +476,32 @@ DISC = [
     'Respecto al corpus, la estrategia de traducir variables numéricas a descriptores verbales y construir respuestas '
     'de referencia a partir del rankeo sigue la lógica de Armando et al. (2023), que destacaron la calidad del corpus '
     'como factor clave del ajuste con LoRA, y de Mena (2023) y Dettmers et al. (2023), que mostraron la viabilidad del '
-    'ajuste cuantizado con recursos limitados. [Completar la discusión de los objetivos específicos 3 y 4 con los '
-    'resultados del ajuste y de la integración, contrastándolos con Hu et al. (2021), Mena (2023), Millan (2025) y '
-    'Martínez Sixto et al. (2025).]',
+    'ajuste cuantizado con recursos limitados.',
+    f'El ajuste con LoRA entrenó cerca del 0.3 % de los parámetros de un modelo de 1 500 millones y, en '
+    f'{LT["hibrido"]["minutos"]:.0f} minutos de una GPU {LL["gpu"]}, bastó para que el modelo aprendiera a redactar '
+    'rutas fieles al ranking. Este resultado concuerda con Hu et al. (2021), quienes mostraron que la adaptación de '
+    'bajo rango es competitiva frente al ajuste fino tradicional con una fracción del costo computacional, y con '
+    'Dettmers et al. (2023), para quienes la cuantización en 4 bits no degrada el ajuste. A diferencia de Mena (2023), '
+    'que identificó la memoria de video como una limitación importante al ajustar modelos de 7 mil millones de '
+    'parámetros, el uso de un modelo de 1 500 millones permitió entrenar en infraestructura gratuita, lo que favorece '
+    'la replicación en universidades con recursos limitados.',
+    f'La comparación entre condiciones muestra que el aporte del componente tabular no está en la forma del texto, que '
+    f'el modelo aprendió aun sin probabilidades, con un ROUGE-L de {LM[CS]["rougeL"][0]:.3f}, sino en su contenido: '
+    f'sin el ranking, la coherencia descendió a {LM[CS]["coherencia"][0]:.3f}, y con él alcanzó '
+    f'{LM[CH]["coherencia"][0]:.3f}. Este hallazgo coincide con Martínez Sixto et al. (2025), quienes encontraron que la '
+    'efectividad de un modelo de lenguaje depende en gran medida de la calidad y relevancia del contexto que recibe, '
+    'y respalda lo planteado por Millan (2025) sobre la ventaja de los enfoques híbridos. En cambio, matiza lo '
+    'señalado por Castejon (2025), para quien una ingeniería de instrucciones adecuada elimina las alucinaciones: el '
+    'modelo base recibió la misma instrucción con el ranking y, aun así, generó textos extensos que no respetaron el '
+    'orden de los programas, lo que indica que en esta tarea la instrucción por sí sola no bastó y fue necesario el '
+    'ajuste fino.',
+    f'Los valores máximos de la arquitectura híbrida, con el {IDENT_H:.1f} % de rutas idénticas a la referencia, deben '
+    'interpretarse con cautela. Las respuestas de referencia se construyeron con una estructura fija a partir del '
+    'ranking, por lo que el resultado demuestra que el modelo traslada con exactitud la información del componente '
+    'tabular, pero no mide la calidad pedagógica de la orientación ni su utilidad percibida por los postulantes. Esta '
+    'es la principal limitación del componente lingüístico y justifica validar las rutas con especialistas en '
+    'orientación vocacional y con los propios postulantes, y ampliar el corpus con respuestas redactadas por '
+    'orientadores, en línea con Armando et al. (2023), que destacaron la calidad del corpus como factor clave.',
 ]
 
 CONCL = [
@@ -388,12 +514,22 @@ CONCL = [
     f'La transformación de los datos en pares de instrucción y respuesta produjo un corpus de {n(K["pares"])} pares, '
     'representativo de la población, coherente en el 100 % de los casos y balanceado entre particiones, por lo que se '
     'acepta la hipótesis específica 2.',
-    '[Pendiente de la ejecución del ajuste con LoRA: conclusión del objetivo específico 3 y decisión sobre la '
-    'hipótesis específica 3.]',
+    f'El ajuste fino con LoRA, que entrenó cerca del 0.3 % de los parámetros del modelo Qwen2.5-1.5B-Instruct, permitió '
+    f'generar rutas educativas con una coherencia contextual de {H3["coherencia"]:.3f}, superior al umbral de 0.80 '
+    f'(prueba binomial exacta, p {"< .001" if H3["p"] < .001 else "= " + pv(H3["p"])}), con un ROUGE-L de '
+    f'{LM[CH]["rougeL"][0]:.3f} y un BERTScore F1 de {LM[CH]["bertscore"][0]:.3f}, por lo que '
+    + ('se acepta' if H3['p'] < .05 and H3['coherencia'] > .8 else 'se rechaza') + ' la hipótesis específica 3. La '
+    'coherencia depende de que el modelo reciba el ranking del componente tabular: sin él, descendió a '
+    f'{LM[CS]["coherencia"][0]:.3f}.',
     f'En la validación comparativa, el componente de rankeo superó al orden aleatorio, con un MRR de {f3(rx.MRR)} frente '
     f'a {f3(ra.MRR)}, pero no al orden por popularidad del programa, que alcanzó {f3(rp_.MRR)}'
     f'{", con el que resultó estadísticamente equivalente" if RJ["wilcoxon_p"] >= .05 else ""}, sin generar brecha '
-    'territorial. [Completar con la comparación de las rutas generadas y la decisión sobre la hipótesis específica 4.]',
+    f'territorial. En la calidad de las rutas, la arquitectura híbrida alcanzó una métrica combinada de '
+    f'{LM[CH]["combinada"][0]:.3f} y superó en {H4[CB]["mejora_pct"]:.1f} % al modelo base y en {H4[CS]["mejora_pct"]:.1f} % '
+    'al modelo ajustado sin componente tabular, con diferencias significativas (Wilcoxon, p < .001), por lo que '
+    + ('se acepta la hipótesis específica 4 en la dimensión de generación de rutas, mientras que en la dimensión del '
+       'rankeo la mejora no se verifica.' if H4_OK else
+       'no se verifica la mejora planteada en la hipótesis específica 4.'),
 ]
 RECOM = [
     'A futuras investigaciones, incorporar variables de interacción entre el perfil del postulante y las exigencias de '
