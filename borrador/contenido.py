@@ -368,7 +368,7 @@ IDENT = [
     'y de estrategias preventivas limita la permanencia.',
     'En la región de Puno el panorama se intensifica por las desigualdades socioeconómicas y geográficas del Altiplano '
     'y por el limitado acceso a información vocacional personalizada. La deserción y el bajo rendimiento representan '
-    'desafíos críticos para la Universidad Nacional del Altiplano (Cuentas Yupanqui, 2024), institución en la que la '
+    'desafíos críticos para la Universidad Nacional del Altiplano (Escobar-Mamani y Cuentas Yupanqui, 2024), institución en la que la '
     'inteligencia artificial ha mostrado potencial para mejorar el rendimiento académico (Rodriguez, 2023).',
     'Entre las causas del problema destaca la ausencia de sistemas predictivos que aprovechen los datos académicos '
     'históricos de los postulantes: aunque la universidad y el sistema educativo regional registran los resultados de '
