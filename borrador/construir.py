@@ -443,7 +443,7 @@ for el in fin:
 insertar_despues(b_a2, [
     par('NORML12', 'Las bases de datos anonimizadas de admisión y del SIAGIE, el corpus CareER-Dataset en formato JSONL y los '
         'programas de procesamiento en Python se encuentran disponibles para su validación en el siguiente enlace: '
-        '[insertar enlace del repositorio].'),
+        'https://github.com/michaelmcs/data_tesis_michael.'),
     par('NORML12', 'Los programas comprenden: preprocesamiento y emparejamiento de las bases, cálculo de resultados y pruebas '
         'estadísticas, búsqueda de hiperparámetros del modelo tabular, y construcción del corpus de instrucción y respuesta.')])
 
