@@ -26,6 +26,18 @@ EP  - 300
 ER  - 
 
 TY  - JOUR
+AU  - Breiman, L.
+TI  - Random forests
+PY  - 2001
+T2  - Machine Learning
+VL  - 45
+IS  - 1
+DO  - 10.1023/A:1010933404324
+SP  - 5
+EP  - 32
+ER  - 
+
+TY  - JOUR
 AU  - Brier, G. W.
 TI  - Verification of forecasts expressed in terms of probability
 PY  - 1950
@@ -35,6 +47,33 @@ IS  - 1
 DO  - 10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2
 SP  - 1
 EP  - 3
+ER  - 
+
+TY  - BOOK
+AU  - Brown, T. B.
+AU  - Mann, B.
+AU  - Ryder, N.
+AU  - Subbiah, M.
+AU  - Kaplan, J.
+AU  - Dhariwal, P.
+AU  - Neelakantan, A.
+AU  - Shyam, P.
+AU  - Sastry, G.
+AU  - Askell, A.
+AU  - Agarwal, S.
+AU  - Herbert-Voss, A.
+AU  - Krueger, G.
+AU  - Henighan, T.
+AU  - Child, R.
+AU  - Ramesh, A.
+AU  - Ziegler, D. M.
+AU  - Wu, J.
+AU  - Winter, C.
+AU  - Amodei, D.
+TI  - Language models are few-shot learners
+PY  - 2020
+PB  - arXiv
+DO  - 10.48550/arXiv.2005.14165
 ER  - 
 
 TY  - JOUR
@@ -133,6 +172,20 @@ T2  - Advances in Neural Information Processing Systems 36
 DO  - 10.48550/arXiv.2305.14314
 ER  - 
 
+TY  - CONF
+AU  - Devlin, J.
+AU  - Chang, M.-W.
+AU  - Lee, K.
+AU  - Toutanova, K.
+TI  - BERT: Pre-training of deep bidirectional transformers for language understanding
+PY  - 2019
+T2  - Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies
+PB  - Association for Computational Linguistics
+DO  - 10.18653/v1/N19-1423
+SP  - 4171
+EP  - 4186
+ER  - 
+
 TY  - JOUR
 AU  - Escalante López, J. I.
 AU  - Medina Valderrama, C. J.
@@ -175,6 +228,18 @@ TI  - Large language models (LLMs) on tabular data: Prediction, generation, and 
 PY  - 2024
 T2  - Transactions on Machine Learning Research
 UR  - http://arxiv.org/abs/2402.17944
+ER  - 
+
+TY  - JOUR
+AU  - Fawcett, T.
+TI  - An introduction to ROC analysis
+PY  - 2006
+T2  - Pattern Recognition Letters
+VL  - 27
+IS  - 8
+DO  - 10.1016/j.patrec.2005.10.010
+SP  - 861
+EP  - 874
 ER  - 
 
 TY  - CONF
@@ -220,6 +285,18 @@ IS  - 2
 DO  - 10.1016/j.edumed.2018.11.008
 SP  - 145
 EP  - 148
+ER  - 
+
+TY  - JOUR
+AU  - Friedman, J. H.
+TI  - Greedy function approximation: A gradient boosting machine
+PY  - 2001
+T2  - The Annals of Statistics
+VL  - 29
+IS  - 5
+DO  - 10.1214/aos/1013203451
+SP  - 1189
+EP  - 1232
 ER  - 
 
 TY  - JOUR
@@ -274,6 +351,53 @@ EP  - 36
 ER  - 
 
 TY  - BOOK
+AU  - Hardt, M.
+AU  - Price, E.
+AU  - Srebro, N.
+TI  - Equality of opportunity in supervised learning
+PY  - 2016
+PB  - arXiv
+DO  - 10.48550/arXiv.1610.02413
+ER  - 
+
+TY  - BOOK
+AU  - Hastie, T.
+AU  - Tibshirani, R.
+AU  - Friedman, J.
+TI  - The elements of statistical learning: Data mining, inference, and prediction (2.a ed.)
+PY  - 2009
+PB  - Springer
+DO  - 10.1007/978-0-387-84858-7
+ER  - 
+
+TY  - BOOK
+AU  - Holtzman, A.
+AU  - Buys, J.
+AU  - Du, L.
+AU  - Forbes, M.
+AU  - Choi, Y.
+TI  - The curious case of neural text degeneration
+PY  - 2019
+PB  - arXiv
+DO  - 10.48550/arXiv.1904.09751
+ER  - 
+
+TY  - BOOK
+AU  - Houlsby, N.
+AU  - Giurgiu, A.
+AU  - Jastrzebski, S.
+AU  - Morrone, B.
+AU  - de Laroussilhe, Q.
+AU  - Gesmundo, A.
+AU  - Attariyan, M.
+AU  - Gelly, S.
+TI  - Parameter-efficient transfer learning for NLP
+PY  - 2019
+PB  - arXiv
+DO  - 10.48550/arXiv.1902.00751
+ER  - 
+
+TY  - BOOK
 AU  - Hu, E. J.
 AU  - Shen, Y.
 AU  - Wallis, P.
@@ -313,6 +437,21 @@ IS  - 4
 DO  - 10.1145/582415.582418
 SP  - 422
 EP  - 446
+ER  - 
+
+TY  - JOUR
+AU  - Kaufman, S.
+AU  - Rosset, S.
+AU  - Perlich, C.
+AU  - Stitelman, O.
+TI  - Leakage in data mining: Formulation, detection, and avoidance
+PY  - 2012
+T2  - ACM Transactions on Knowledge Discovery from Data
+VL  - 6
+IS  - 4
+DO  - 10.1145/2382577.2382579
+SP  - 1
+EP  - 21
 ER  - 
 
 TY  - JOUR
@@ -382,6 +521,15 @@ T2  - Sensors and Actuators B: Chemical
 VL  - 446
 DO  - 10.1016/j.snb.2025.138644
 SP  - 138644
+ER  - 
+
+TY  - BOOK
+AU  - Loshchilov, I.
+AU  - Hutter, F.
+TI  - Decoupled weight decay regularization
+PY  - 2017
+PB  - arXiv
+DO  - 10.48550/arXiv.1711.05101
 ER  - 
 
 TY  - JOUR
@@ -492,6 +640,53 @@ M3  - Trabajo de fin de estudios
 UR  - https://repositorio.unican.es/xmlui/handle/10902/33837
 ER  - 
 
+TY  - CONF
+AU  - Niculescu-Mizil, A.
+AU  - Caruana, R.
+TI  - Predicting good probabilities with supervised learning
+PY  - 2005
+T2  - Proceedings of the 22nd International Conference on Machine Learning
+PB  - Association for Computing Machinery
+DO  - 10.1145/1102351.1102430
+SP  - 625
+EP  - 632
+ER  - 
+
+TY  - BOOK
+AU  - Ouyang, L.
+AU  - Wu, J.
+AU  - Jiang, X.
+AU  - Almeida, D.
+AU  - Wainwright, C. L.
+AU  - Mishkin, P.
+AU  - Zhang, C.
+AU  - Agarwal, S.
+AU  - Slama, K.
+AU  - Ray, A.
+AU  - Schulman, J.
+AU  - Hilton, J.
+AU  - Kelton, F.
+AU  - Miller, L.
+AU  - Simens, M.
+AU  - Askell, A.
+AU  - Welinder, P.
+AU  - Christiano, P.
+AU  - Leike, J.
+AU  - Lowe, R.
+TI  - Training language models to follow instructions with human feedback
+PY  - 2022
+PB  - arXiv
+DO  - 10.48550/arXiv.2203.02155
+ER  - 
+
+TY  - BOOK
+AU  - Qwen Team
+TI  - Qwen2.5 technical report
+PY  - 2024
+PB  - arXiv
+DO  - 10.48550/arXiv.2412.15115
+ER  - 
+
 TY  - JOUR
 AU  - Ramos-Rivera, R. E.
 AU  - Santana Mancilla, P. C.
@@ -564,6 +759,19 @@ IS  - 1
 DO  - 10.35669/rcys.2020.10(1).19-41
 SP  - 19
 EP  - 41
+ER  - 
+
+TY  - CONF
+AU  - Sennrich, R.
+AU  - Haddow, B.
+AU  - Birch, A.
+TI  - Neural machine translation of rare words with subword units
+PY  - 2016
+T2  - Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics
+PB  - Association for Computational Linguistics
+DO  - 10.18653/v1/P16-1162
+SP  - 1715
+EP  - 1725
 ER  - 
 
 TY  - JOUR
@@ -667,6 +875,22 @@ PB  - National Institute of Standards and Technology
 UR  - https://trec.nist.gov/pubs/trec8/papers/qa_report.pdf
 SP  - 77
 EP  - 82
+ER  - 
+
+TY  - BOOK
+AU  - Wei, J.
+AU  - Bosma, M.
+AU  - Zhao, V. Y.
+AU  - Guu, K.
+AU  - Yu, A. W.
+AU  - Lester, B.
+AU  - Du, N.
+AU  - Dai, A. M.
+AU  - Le, Q. V.
+TI  - Finetuned language models are zero-shot learners
+PY  - 2021
+PB  - arXiv
+DO  - 10.48550/arXiv.2109.01652
 ER  - 
 
 TY  - JOUR
