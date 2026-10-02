@@ -74,7 +74,7 @@ python borrador/generar_borrador.py         # genera Borrador_Tesis_CareER-GPT_E
 
 Dependencias: `pip install -r requirements.txt`, con Python 3.11. Las versiones están fijadas porque pandas 3 y otras versiones de XGBoost cambian ligeramente las cifras del modelo tabular.
 
-Estado: el borrador ya se genera completo, con 18 tablas, 7 figuras y 18 ecuaciones, incluidos los resultados del modelo de lenguaje. Solo faltan las cuatro referencias de la tarea 4 y el enlace del repositorio en el Anexo 2.
+Estado: el borrador ya se genera completo, con 18 tablas, 7 figuras y 18 ecuaciones, incluidos los resultados del modelo de lenguaje. Las referencias y el enlace del repositorio en el Anexo 2 ya están completos; no quedan textos pendientes.
 
 ## 6. Tareas pendientes, en este orden
 
@@ -98,9 +98,9 @@ Si el entrenamiento se hace en Colab, el usuario traerá `resultados_llm.zip` co
 
 En `borrador/contenido2.py` hay textos marcados entre corchetes como pendientes: objetivo 3 en resultados, subsección "Calidad de las rutas generadas" del objetivo 4, conclusiones 3 y 4, resumen y abstract, y el párrafo final de la discusión. Reemplazarlos con los valores de `resultados_llm.json`, agregar una tabla por condición y la curva de pérdida como Figura 7, y regenerar con `python borrador/generar_borrador.py`.
 
-### Tarea 4. Referencias que debe completar el usuario
+### Tarea 4. Referencias, completada
 
-Behr (2020), Cuentas Yupanqui (2024), Velasquez (2023) y Moreira et al. (2024) están incompletas. Pedirle los datos; no inventarlos.
+Escobar-Mamani y Cuentas Yupanqui (2024), Sabando Moreira y Zambrano Montenegro (2024) y Velasquez Velasquez (2023) se completaron con sus fuentes. Behr et al. (2020) se cita como fuente secundaria, "como se citó en Escalante López et al., 2023", y no figura en la bibliografía.
 
 ### Tarea 5. En Word
 
