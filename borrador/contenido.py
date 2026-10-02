@@ -282,11 +282,7 @@ ANT_INT = [
     'estos modelos con los árboles de decisión en conjuntos grandes y heterogéneos. Encontraron una gran capacidad de '
     'los LLM para tareas complejas, con debilidades en generalización e interpretabilidad, y concluyeron que se '
     'requiere más investigación para mejorar su rendimiento y adaptabilidad.',
-    'Fernández et al. (2025) estudiaron el ajuste fino de modelos de lenguaje para convertirlos en tutores de '
-    'matemática y física en educación básica, entrenándolos con problemas específicos como los del conjunto GSM8K. Los '
-    'resultados mostraron que el ajuste fino mejora la precisión en la resolución de problemas y la claridad con que '
-    'el modelo explica los conceptos, lo que lo convierte en una herramienta educativa valiosa en ciencias.',
-    'En otro estudio, Fernández et al. (2025) optimizaron grandes modelos de lenguaje mediante técnicas de ajuste '
+    'Fernández et al. (2025) optimizaron grandes modelos de lenguaje mediante técnicas de ajuste '
     'eficiente sobre infraestructura de alto rendimiento, como el supercomputador Clementina XXI, con el objetivo de '
     'mejorar la eficiencia computacional y el rendimiento en seguridad, biología y educación. Emplearon LoRA, QLoRA, '
     'ajuste con adaptadores y mezcla de expertos, evaluaron la eficacia de estas técnicas y establecieron repositorios '

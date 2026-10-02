@@ -69,12 +69,13 @@ python pipeline/03_resultados.py            # modelos, pruebas, corpus y figuras
 python pipeline/05_figura_importancia.py    # reetiqueta y colorea la figura de importancia
 python pipeline/06_ranking.py               # evaluación del rankeo
 python pipeline/07_figuras_conceptuales.py  # figuras de LoRA, arquitectura y entrenamiento
+python pipeline/09_complementos.py          # caracterización, tasa por promedio y curva de calibración
 python borrador/generar_borrador.py         # genera Borrador_Tesis_CareER-GPT_EPG_UNA.docx
 ```
 
 Dependencias: `pip install -r requirements.txt`, con Python 3.11. Las versiones están fijadas porque pandas 3 y otras versiones de XGBoost cambian ligeramente las cifras del modelo tabular.
 
-Estado: el borrador ya se genera completo, con 18 tablas, 7 figuras y 18 ecuaciones, incluidos los resultados del modelo de lenguaje. Las referencias y el enlace del repositorio en el Anexo 2 ya están completos; no quedan textos pendientes.
+Estado: el borrador ya se genera completo, con 19 tablas, 9 figuras y 18 ecuaciones, incluidos los resultados del modelo de lenguaje. Del RESUMEN a la última referencia suma 63 páginas en LibreOffice; la plantilla exige entre 60 y 120. Las referencias a tablas y figuras en el texto están escritas a mano: al insertar una nueva hay que renumerar las siguientes. Las referencias y el enlace del repositorio en el Anexo 2 ya están completos; no quedan textos pendientes.
 
 ## 6. Tareas pendientes, en este orden
 
@@ -102,7 +103,7 @@ En `borrador/contenido2.py` hay textos marcados entre corchetes como pendientes:
 
 Las 60 referencias se verificaron contra Crossref y los repositorios de origen el 2 de octubre de 2026, y todas tienen enlace, como exige la plantilla. Se corrigieron autores mal separados que venían de la biblioteca de Mendeley del usuario: León Caranqui (antes Armando et al.), Marroquin Balarezo et al. (antes Balarezo et al.), García Subies, Guadalupe Mori, Mena Guitarra, Rodas Zegarra de Escalante, Rodríguez Chipana, Yataco Cañari y Jacha Rojas, Jardón Gallegos et al., Alejandro Jaramillo, Castejón Lozano, Millán Gordillo, Yupanqui Sanchez y Fernández et al. Gao et al. y Liu et al. pasan a 2026 por el año de su volumen. Behr et al. (2020) se cita como fuente secundaria, "como se citó en Escalante López et al., 2023", y no figura en la bibliografía.
 
-Pendiente de decisión del usuario: el párrafo de antecedentes que atribuye a Fernández et al. (2025) tutores de matemática y física entrenados con GSM8K no está respaldado por ese trabajo, que solo menciona la educación y la matemática como áreas futuras.
+Con autorización del usuario se eliminó el párrafo de antecedentes que atribuía a Fernández et al. (2025) tutores de matemática y física entrenados con GSM8K, porque ese trabajo no lo respalda.
 
 ### Tarea 4b. Citas de Mendeley
 
