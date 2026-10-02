@@ -1,0 +1,10 @@
+{
+  "auc_roc": 0.7215,
+  "auc_roc_sd": 0.0043,
+  "auc_pr": 0.2496,
+  "tasa_base": 0.1145,
+  "umbral": 0.4164,
+  "precision": 0.2429,
+  "sensibilidad": 0.4846,
+  "f1": 0.3236
+}
