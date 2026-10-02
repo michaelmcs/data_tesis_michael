@@ -75,7 +75,7 @@ python borrador/generar_borrador.py         # genera Borrador_Tesis_CareER-GPT_E
 
 Dependencias: `pip install -r requirements.txt`, con Python 3.11. Las versiones están fijadas porque pandas 3 y otras versiones de XGBoost cambian ligeramente las cifras del modelo tabular.
 
-Estado: el borrador ya se genera completo, con 19 tablas, 9 figuras y 18 ecuaciones, incluidos los resultados del modelo de lenguaje. Del RESUMEN a la última referencia suma 63 páginas en LibreOffice; la plantilla exige entre 60 y 120. Las referencias a tablas y figuras en el texto están escritas a mano: al insertar una nueva hay que renumerar las siguientes. Las referencias y el enlace del repositorio en el Anexo 2 ya están completos; no quedan textos pendientes.
+Estado: el borrador ya se genera completo, con 19 tablas, 9 figuras y 18 ecuaciones, incluidos los resultados del modelo de lenguaje. Del RESUMEN a la última referencia suma 77 páginas en LibreOffice; la plantilla exige entre 60 y 120. Las referencias a tablas y figuras en el texto están escritas a mano: al insertar una nueva hay que renumerar las siguientes. Las referencias y el enlace del repositorio en el Anexo 2 ya están completos; no quedan textos pendientes.
 
 ## 6. Tareas pendientes, en este orden
 
@@ -104,6 +104,10 @@ En `borrador/contenido2.py` hay textos marcados entre corchetes como pendientes:
 Las 60 referencias se verificaron contra Crossref y los repositorios de origen el 2 de octubre de 2026, y todas tienen enlace, como exige la plantilla. Se corrigieron autores mal separados que venían de la biblioteca de Mendeley del usuario: León Caranqui (antes Armando et al.), Marroquin Balarezo et al. (antes Balarezo et al.), García Subies, Guadalupe Mori, Mena Guitarra, Rodas Zegarra de Escalante, Rodríguez Chipana, Yataco Cañari y Jacha Rojas, Jardón Gallegos et al., Alejandro Jaramillo, Castejón Lozano, Millán Gordillo, Yupanqui Sanchez y Fernández et al. Gao et al. y Liu et al. pasan a 2026 por el año de su volumen. Behr et al. (2020) se cita como fuente secundaria, "como se citó en Escalante López et al., 2023", y no figura en la bibliografía.
 
 Con autorización del usuario se eliminó el párrafo de antecedentes que atribuía a Fernández et al. (2025) tutores de matemática y física entrenados con GSM8K, porque ese trabajo no lo respalda.
+
+### Tarea 4c. Marco teórico ampliado
+
+El marco teórico está en `borrador/marco.py`, con 23 subtítulos y unas 6 000 palabras, organizado de lo general a lo específico según las tesis aprobadas de la Maestría en Informática de la UNA-Puno (repositorio, colección 12a3543c-9ebd-4a89-a76b-aaca899c6648). Explica el procedimiento de cada técnica sin repetir las fórmulas de la metodología. Las 16 fuentes nuevas, entre ellas Friedman (2001), Hastie et al. (2009), Devlin et al. (2019), Brown et al. (2020) y Qwen Team (2024), se verificaron en Crossref y arXiv, y las cifras citadas se comprobaron en sus resúmenes. La bibliografía tiene 76 referencias, todas citadas.
 
 ### Tarea 4b. Citas de Mendeley
 
