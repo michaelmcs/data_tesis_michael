@@ -98,9 +98,15 @@ Si el entrenamiento se hace en Colab, el usuario traerá `resultados_llm.zip` co
 
 En `borrador/contenido2.py` hay textos marcados entre corchetes como pendientes: objetivo 3 en resultados, subsección "Calidad de las rutas generadas" del objetivo 4, conclusiones 3 y 4, resumen y abstract, y el párrafo final de la discusión. Reemplazarlos con los valores de `resultados_llm.json`, agregar una tabla por condición y la curva de pérdida como Figura 7, y regenerar con `python borrador/generar_borrador.py`.
 
-### Tarea 4. Referencias, completada
+### Tarea 4. Referencias, completada y verificada
 
-Escobar-Mamani y Cuentas Yupanqui (2024), Sabando Moreira y Zambrano Montenegro (2024) y Velasquez Velasquez (2023) se completaron con sus fuentes. Behr et al. (2020) se cita como fuente secundaria, "como se citó en Escalante López et al., 2023", y no figura en la bibliografía.
+Las 60 referencias se verificaron contra Crossref y los repositorios de origen el 2 de octubre de 2026, y todas tienen enlace, como exige la plantilla. Se corrigieron autores mal separados que venían de la biblioteca de Mendeley del usuario: León Caranqui (antes Armando et al.), Marroquin Balarezo et al. (antes Balarezo et al.), García Subies, Guadalupe Mori, Mena Guitarra, Rodas Zegarra de Escalante, Rodríguez Chipana, Yataco Cañari y Jacha Rojas, Jardón Gallegos et al., Alejandro Jaramillo, Castejón Lozano, Millán Gordillo, Yupanqui Sanchez y Fernández et al. Gao et al. y Liu et al. pasan a 2026 por el año de su volumen. Behr et al. (2020) se cita como fuente secundaria, "como se citó en Escalante López et al., 2023", y no figura en la bibliografía.
+
+Pendiente de decisión del usuario: el párrafo de antecedentes que atribuye a Fernández et al. (2025) tutores de matemática y física entrenados con GSM8K no está respaldado por ese trabajo, que solo menciona la educación y la matemática como áreas futuras.
+
+### Tarea 4b. Citas de Mendeley
+
+`borrador/mendeley.py` convierte las citas en controles de contenido de Mendeley Cite, con el mismo formato que el proyecto aprobado: etiqueta `MENDELEY_CITATION_v3_` con los metadatos CSL en base64, bloque `MENDELEY_BIBLIOGRAPHY` y registro del complemento con estilo APA 7 sin "&" y configuración regional es-ES. Las citas narrativas usan el texto manual del complemento. También genera `referencias_mendeley.ris` para importar las referencias corregidas a Mendeley. La sigla de la universidad es UNA-Puno, según el Estatuto 2023.
 
 ### Tarea 5. En Word
 

@@ -343,7 +343,7 @@ insertar_despues(b_po, [par('NORML12', x) for x in POBL] + [
     titulo('Tabla', 'Conformación del conjunto analítico de postulaciones, Universidad Nacional del Altiplano, 2021-I a 2025-II', 'L12'),
     tabla(['Etapa', 'Postulaciones', 'Porcentaje'], t1, 'L12', anchos=[5103, 1700, 1700]),
     nota(f'El conjunto analítico corresponde a {n(P["personas_analizables"])} personas. Elaboración propia con datos de la '
-         'Oficina de Admisión de la UNAP y del SIAGIE.', 'L12')])
+         'Oficina de Admisión de la UNA-Puno y del SIAGIE.', 'L12')])
 eliminar_entre(b_mu, b_me); insertar_despues(b_mu, [par('NORML12', x) for x in MUESTRA])
 eliminar_entre(b_me, b_de); insertar_despues(b_me, items(METODO, 'NORML12', 'L12', 0))
 eliminar_entre(b_de, b_c4)
@@ -415,7 +415,10 @@ insertar_despues(b_rec, [par(ppr=pp_r, partes=x) for x in RECOM])
 # =================================================================== BIBLIOGRAFÍA
 pp_b = ppr_de(buscar('Las citas deben realizarse', 'BIBLIOGRAFIA', exacto=False))
 b_anx = buscar('ANEXOS', 'TITLE01'); eliminar_entre(b_bib, b_anx)
-insertar_despues(b_bib, [par(ppr=pp_b, partes=x) for x in BIB])
+import mendeley as MEN
+# referencias con cursivas APA 7: revista y volumen en artículos, título en tesis, libros e informes
+pars_bib = [par(ppr=pp_b, partes=[(t, {'i': c}) for t, c in MEN.segmentos(x, MEN.leer_referencia(x))]) for x in BIB]
+insertar_despues(b_bib, pars_bib)
 
 # =================================================================== ANEXOS
 b_a1 = buscar('Anexo 1. Matriz de consistencia', exacto=False, desde=b_anx)
@@ -461,6 +464,16 @@ insertar_despues(b_a2, [
     par('NORML12', 'Los programas comprenden: preprocesamiento y emparejamiento de las bases, cálculo de resultados y pruebas '
         'estadísticas, búsqueda de hiperparámetros del modelo tabular, y construcción del corpus de instrucción y respuesta.')])
 
+# =================================================================== citas de Mendeley
+# las citas en texto pasan a controles de contenido de Mendeley Cite con los metadatos de cada referencia,
+# y la bibliografía queda dentro del bloque de bibliografía de Mendeley
+IDX_MEN = MEN.Indice(BIB)
+CITAS_MEN = MEN.convertir_citas(body, IDX_MEN, excluir=set(pars_bib))
+MEN.bibliografia_sdt(pars_bib)
+open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'referencias_mendeley.ris'), 'w',
+     encoding='utf8').write(MEN.ris(IDX_MEN))
+print('Citas de Mendeley:', len(CITAS_MEN))
+
 # =================================================================== guardado
 tree.write(X + '/word/document.xml', xml_declaration=True, encoding='UTF-8', standalone=True)
 rels.write(X + '/word/_rels/document.xml.rels', xml_declaration=True, encoding='UTF-8', standalone=True)
@@ -468,4 +481,5 @@ ct = open(X + '/[Content_Types].xml', encoding='utf8').read()
 if 'Extension="png"' not in ct:
     ct = ct.replace('<Default Extension="xml"', '<Default Extension="png" ContentType="image/png"/><Default Extension="xml"')
     open(X + '/[Content_Types].xml', 'w', encoding='utf8').write(ct)
+MEN.registrar_complemento(X, CITAS_MEN)
 print('Tablas:', cont['Tabla'], '| Figuras:', cont['Figura'])

@@ -37,7 +37,7 @@ ACRONIMOS = [
     ('SIAGIE', 'Sistema de Información de Apoyo a la Gestión de la Institución Educativa'),
     ('TFN', 'Tasa de falsos negativos'),
     ('UGEL', 'Unidad de Gestión Educativa Local'),
-    ('UNAP', 'Universidad Nacional del Altiplano de Puno'),
+    ('UNA-Puno', 'Universidad Nacional del Altiplano'),
     ('XGBoost', 'Potenciación extrema del gradiente (Extreme Gradient Boosting)'),
 ]
 
@@ -84,14 +84,14 @@ INTRO = [
     'de Puno, la decisión de a qué programa postular suele tomarse sin información personalizada sobre las '
     'probabilidades reales de éxito, pese a que las instituciones acumulan registros históricos que podrían orientar '
     'esa decisión. El presente estudio se inscribe en el programa de Maestría en Informática con mención en Gerencia de '
-    'Tecnologías de Información y Comunicaciones de la Escuela de Posgrado de la Universidad Nacional del Altiplano, '
+    'Tecnologías de Información y Comunicaciones de la Escuela de Posgrado de la Universidad Nacional del Altiplano (UNA-Puno), '
     'en la línea de investigación Inteligencia de negocios y datos, sublínea BI, Big Data, aprendizaje automático y '
     'visualización de datos.',
     'El propósito de la investigación fue desarrollar y validar CareER-GPT, una arquitectura híbrida de inteligencia '
     'artificial que combina un modelo tabular, encargado de estimar y ordenar la probabilidad de ingreso de un '
     'postulante en cada programa de estudios, con un modelo de lenguaje grande ajustado mediante adaptación de bajo '
     'rango, encargado de traducir ese ordenamiento en una ruta educativa personalizada y comprensible. Para ello se '
-    'integraron los registros de los procesos de admisión de la Universidad Nacional del Altiplano con el historial '
+    'integraron los registros de los procesos de admisión de la UNA-Puno con el historial '
     'académico de educación secundaria registrado en el SIAGIE.',
     'Metodológicamente, el estudio adoptó un enfoque cuantitativo, de tipo aplicado y diseño preexperimental. El '
     'componente tabular se evaluó mediante validación cruzada agrupada por persona, con métricas adecuadas al '
@@ -111,7 +111,7 @@ MARCO = [
         'fortalezas y compensar sus limitaciones. En los sistemas de recomendación, por ejemplo, la integración del '
         'filtrado colaborativo con el filtrado basado en contenido ofrece recomendaciones más precisas y '
         'personalizadas, especialmente cuando un solo enfoque resulta insuficiente, como en el arranque en frío o ante '
-        'la escasez de datos (Millan, 2025).',
+        'la escasez de datos (Millán Gordillo, 2025).',
         'Cuando la arquitectura combina modelos de lenguaje de gran tamaño con modelos tabulares, se integra la '
         'capacidad de comprensión contextual de los primeros con la capacidad analítica sobre datos estructurados de '
         'los algoritmos tabulares. Esta colaboración permite procesar de forma conjunta información estructurada y no '
@@ -124,7 +124,7 @@ MARCO = [
         'rango en las capas del modelo, lo que reduce considerablemente la cantidad de parámetros entrenables y hace el '
         'ajuste más eficiente en memoria y cómputo, manteniendo la efectividad del modelo en la tarea. La técnica '
         'resulta especialmente útil en modelos muy grandes, en los que un ajuste completo es poco práctico (Gao et al., '
-        '2025; Liu et al., 2025). Su variante cuantizada, QLoRA, permite además ajustar modelos de varios miles de '
+        '2026; Liu et al., 2026). Su variante cuantizada, QLoRA, permite además ajustar modelos de varios miles de '
         'millones de parámetros en una sola unidad de procesamiento gráfico (Dettmers et al., 2023).',
         'Formalmente, dada una matriz de pesos preentrenada W₀ de dimensión d × k, LoRA no la modifica, sino que '
         'representa su actualización como el producto de dos matrices de bajo rango, B de dimensión d × r y A de '
@@ -197,9 +197,9 @@ MARCO = [
         'criterio de pertinencia, como la probabilidad estimada de éxito en cada programa. La integración de modelos '
         'predictivos tabulares con modelos de lenguaje permite identificar patrones de rendimiento académico, '
         'inclinaciones de interés y riesgos de abandono, y presentar las alternativas ordenadas de acuerdo con las '
-        'características y antecedentes individuales (Fernandez et al., 2025; Navarro Forero et al., 2025).']),
+        'características y antecedentes individuales (Fernández et al., 2025; Navarro Forero et al., 2025).']),
     ('Orientación vocacional', [
-        'Según Cisneros-Bravo et al. (2023) y Alejandro (2024), la orientación vocacional es un proceso educativo y '
+        'Según Cisneros-Bravo et al. (2023) y Alejandro Jaramillo (2024), la orientación vocacional es un proceso educativo y '
         'psicológico que ayuda a los estudiantes a explorar sus intereses, valores y habilidades, para tomar decisiones '
         'académicas acordes con su proyecto de vida. En la actualidad este proceso incorpora herramientas tecnológicas '
         'e inteligencia artificial para ofrecer asesoramiento personalizado y mejorar la retención universitaria (Flores '
@@ -208,7 +208,7 @@ MARCO = [
         'El perfil del estudiante describe sus habilidades, intereses, motivaciones, rendimiento académico y '
         'capacidades tecnológicas. Esta información es fundamental para orientar las decisiones educativas y adaptar el '
         'proceso de aprendizaje, y puede ser procesada mediante modelos de lenguaje y análisis de datos para construir '
-        'itinerarios específicos para cada contexto (Yupanquin, 2024).']),
+        'itinerarios específicos para cada contexto (Yupanqui Sanchez, 2024).']),
     ('Éxito académico y retención estudiantil', [
         'El éxito académico es el grado en que los estudiantes alcanzan las metas de aprendizaje establecidas por el '
         'sistema educativo, y se manifiesta en un rendimiento constante, satisfacción personal y capacidad sostenida '
@@ -221,10 +221,10 @@ MARCO = [
     ('Desempeño académico', [
         'El desempeño académico es el resultado del proceso de aprendizaje reflejado en el nivel de rendimiento del '
         'estudiante, y se mide mediante calificaciones, evaluaciones, logro de objetivos y desarrollo de competencias '
-        '(Jardon et al., 2024). Desde un enfoque integral, no depende solo de las habilidades cognitivas, sino también '
+        '(Jardón Gallegos et al., 2024). Desde un enfoque integral, no depende solo de las habilidades cognitivas, sino también '
         'de la motivación, de la adecuación entre intereses y carrera elegida y de las condiciones institucionales '
         '(Escalante López et al., 2023). La literatura reciente destaca además la autoeficacia, la gestión del tiempo y '
-        'la percepción del apoyo institucional como factores de la perseverancia (Rodas, 2024).']),
+        'la percepción del apoyo institucional como factores de la perseverancia (Rodas Zegarra de Escalante, 2024).']),
     ('Deserción estudiantil', [
         'La deserción es el abandono del proceso educativo antes de su culminación. Según Torres-Delgado et al. (2024), '
         'es un fenómeno multicausal en el que se entrelazan factores académicos, sociales, familiares y personales que '
@@ -246,13 +246,13 @@ MARCO = [
 ]
 
 ANT_INT = [
-    'García y Serradilla (2021) tuvieron como objetivo desarrollar técnicas de clasificación de textos que alcanzaran '
+    'García Subies (2021) tuvo como objetivo desarrollar técnicas de clasificación de textos que alcanzaran '
     'el estado del arte sin requerir grandes recursos computacionales, y ampliar los modelos de lenguaje para el '
     'español ante la escasez de recursos para esta lengua. Emplearon modelos basados en la arquitectura Transformer y '
     'BERT, y obtuvieron resultados alineados con el estado del arte, que evidencian la eficiencia de modelos abiertos de '
-    'tamaño moderado. Concluyeron que existe un interés insuficiente de la industria y la academia por los modelos '
+    'tamaño moderado. Concluyó que existe un interés insuficiente de la industria y la academia por los modelos '
     'neuronales en español, lo que representa un nicho para el desarrollo de recursos en este idioma.',
-    'Mena (2023) se propuso evaluar modelos de lenguaje masivos en español, comparar LLaMA2-Chat, Mistral y Falcon, y '
+    'Mena Guitarra (2023) se propuso evaluar modelos de lenguaje masivos en español, comparar LLaMA2-Chat, Mistral y Falcon, y '
     'estudiar su adaptación para generar chatbots en Ecuador. Probó modelos de 7 mil millones de parámetros ajustados '
     'mediante QLoRA. Los tres modelos mejoraron tras el ajuste, con Mistral destacando en tareas complejas y Falcon en '
     'tareas creativas, aunque algunos modelos ajustados mostraron respuestas imprecisas. Concluyó que la memoria de '
@@ -267,12 +267,12 @@ ANT_INT = [
     'una sola unidad de procesamiento gráfico de 48 GB, y su mejor modelo alcanzó un desempeño cercano al de ChatGPT en '
     'el benchmark de Vicuna. Concluyeron que la cuantización no degrada el desempeño del ajuste fino de 16 bits y que '
     'democratiza el ajuste de modelos grandes.',
-    'Armando et al. (2023), en la investigación titulada "URKU: Adaptación de LLaMA 2 para la generación de texto en '
-    'kichwa usando técnicas de Low-Rank Adaptation (LoRA)", tuvieron como propósito adaptar LLaMA 2 al kichwa, crear un '
+    'León Caranqui (2023), en la investigación titulada "URKU: Adaptación de LLaMA 2 para la generación de texto en '
+    'kichwa usando técnicas de Low-Rank Adaptation (LoRA)", tuvo como propósito adaptar LLaMA 2 al kichwa, crear un '
     'corpus de alta calidad y establecer un benchmark para la evaluación, generación y traducción de textos. El modelo '
-    'URKU superó a modelos previos en generación de texto en kichwa, y los autores concluyeron que constituye un avance '
+    'URKU superó a modelos previos en generación de texto en kichwa, y el autor concluyó que constituye un avance '
     'para la inclusión lingüística y la preservación cultural en idiomas con recursos limitados.',
-    'Castejon (2025) diseñó, implementó y evaluó un sistema conversacional que permite consultar en lenguaje natural la '
+    'Castejón Lozano (2025) diseñó, implementó y evaluó un sistema conversacional que permite consultar en lenguaje natural la '
     'información del Museo Sorolla, con preguntas estructuradas por categorías de uso. El clasificador de intención '
     'alcanzó una precisión global de 88 % y un F1 de 0.88, con 0.94 en la clase SQL, y el componente RAG obtuvo una '
     'relevancia de contexto de 0.98 y una fidelidad de 0.67. Concluyó que el sistema, que integra LLM, RAG y Text2SQL, '
@@ -282,11 +282,11 @@ ANT_INT = [
     'estos modelos con los árboles de decisión en conjuntos grandes y heterogéneos. Encontraron una gran capacidad de '
     'los LLM para tareas complejas, con debilidades en generalización e interpretabilidad, y concluyeron que se '
     'requiere más investigación para mejorar su rendimiento y adaptabilidad.',
-    'Fernandez et al. (2025) estudiaron el ajuste fino de modelos de lenguaje para convertirlos en tutores de '
+    'Fernández et al. (2025) estudiaron el ajuste fino de modelos de lenguaje para convertirlos en tutores de '
     'matemática y física en educación básica, entrenándolos con problemas específicos como los del conjunto GSM8K. Los '
     'resultados mostraron que el ajuste fino mejora la precisión en la resolución de problemas y la claridad con que '
     'el modelo explica los conceptos, lo que lo convierte en una herramienta educativa valiosa en ciencias.',
-    'En otro estudio, Fernandez et al. (2025) optimizaron grandes modelos de lenguaje mediante técnicas de ajuste '
+    'En otro estudio, Fernández et al. (2025) optimizaron grandes modelos de lenguaje mediante técnicas de ajuste '
     'eficiente sobre infraestructura de alto rendimiento, como el supercomputador Clementina XXI, con el objetivo de '
     'mejorar la eficiencia computacional y el rendimiento en seguridad, biología y educación. Emplearon LoRA, QLoRA, '
     'ajuste con adaptadores y mezcla de expertos, evaluaron la eficacia de estas técnicas y establecieron repositorios '
@@ -296,7 +296,7 @@ ANT_INT = [
     'lenguaje pequeños y modelos en la nube con menos iteraciones de entrenamiento, buscaron mitigar las alucinaciones. '
     'Los resultados indicaron que los LLM reducen sustancialmente el tiempo de procesamiento de las evaluaciones y '
     'mejoran la toma de decisiones en las instituciones educativas.',
-    'Millan (2025), en el estudio "Estudio comparativo de sistemas de recomendación mediante filtrado colaborativo, '
+    'Millán Gordillo (2025), en el estudio "Estudio comparativo de sistemas de recomendación mediante filtrado colaborativo, '
     'basado en contenido y propuestas híbridas", comparó el rendimiento de los tres tipos de sistemas con datos de '
     'Goodreads que incluyeron 93 398 libros, 34 919 254 interacciones y 2 389 900 reseñas. Los modelos híbridos mejoraron '
     'la calidad de las recomendaciones al superar la sobreespecialización y la escasez de datos, y concluyó que '
@@ -318,21 +318,21 @@ ANT_INT = [
     'fueron determinantes, y el modelo permitió identificar estudiantes en riesgo antes del inicio del ciclo.',
 ]
 ANT_NAC = [
-    'Balarezo et al. (2024) diseñaron un asistente conversacional basado en arquitectura RAG para optimizar la '
+    'Marroquin Balarezo et al. (2024) diseñaron un asistente conversacional basado en arquitectura RAG para optimizar la '
     'búsqueda, recuperación y análisis de resoluciones históricas de la Comisión de Eliminación de Barreras '
     'Burocráticas del INDECOPI. El diseño optimizó la búsqueda contextual, redujo los tiempos de revisión, análisis y '
     'redacción, y mejoró la precisión de las respuestas frente a los buscadores tradicionales. Concluyeron que su '
     'implementación es viable, pertinente y beneficiosa.',
-    'Yatco y Jacha (2024), en la investigación "Modelo de machine learning para predicción de deserción estudiantil", '
+    'Yataco Cañari y Jacha Rojas (2024), en la investigación "Modelo de machine learning para predicción de deserción estudiantil", '
     'desarrollaron un modelo predictivo de la deserción en el Perú con datos de la Encuesta Nacional de Hogares y una '
     'amplia gama de variables sociodemográficas. El modelo mostró potencial para la identificación temprana de '
     'estudiantes en riesgo, y los autores recomendaron explorar modelos híbridos y técnicas de aprendizaje profundo.',
-    'Guadalupe y Rodriguez (2025), en el estudio "Modelo predictivo basado en machine learning para la reducción de la '
+    'Guadalupe Mori (2025), en el estudio "Modelo predictivo basado en machine learning para la reducción de la '
     'deserción estudiantil en las universidades privadas del Perú: caso Universidad Privada San Juan Bautista", '
-    'desarrollaron un modelo predictivo con enfoque cuantitativo y diseño preexperimental longitudinal. El modelo '
-    'anticipó eficazmente la deserción, y concluyeron que los factores personales, académicos y socioeconómicos son '
+    'desarrolló un modelo predictivo con enfoque cuantitativo y diseño preexperimental longitudinal. El modelo '
+    'anticipó eficazmente la deserción, y concluyó que los factores personales, académicos y socioeconómicos son '
     'determinantes y que las intervenciones específicas pueden mejorar la retención.',
-    'Rodas (2024), en la investigación "Orientación vocacional y deserción universitaria en una universidad de Lima '
+    'Rodas Zegarra de Escalante (2024), en la investigación "Orientación vocacional y deserción universitaria en una universidad de Lima '
     '- 2024", exploró la relación entre ambas variables con enfoque cuantitativo y diseño no experimental en una '
     'muestra de 103 estudiantes de ingeniería. Encontró una correlación inversa significativa: a mayor orientación '
     'vocacional, menor deserción, además de la influencia de factores externos, institucionales, académicos y '
@@ -342,8 +342,8 @@ ANT_NAC = [
     'investigaciones. Entre los resultados destacaron las aplicaciones de tutores inteligentes.',
 ]
 ANT_LOC = [
-    'Rodriguez (2023) analizó la relación entre la inteligencia artificial y el rendimiento académico de los '
-    'estudiantes de la Universidad Nacional del Altiplano, en la región Puno, mediante un enfoque cuantitativo, diseño '
+    'Rodríguez Chipana (2023) analizó la relación entre la inteligencia artificial y el rendimiento académico de los '
+    'estudiantes de la UNA-Puno, en la región Puno, mediante un enfoque cuantitativo, diseño '
     'no experimental descriptivo y encuestas aplicadas a una muestra censal de 82 estudiantes. Encontró que la '
     'inteligencia artificial tiene un efecto positivo en el rendimiento académico, principalmente en lo referido al '
     'aprendizaje automático, la tecnología de código abierto y los dispositivos portátiles, y concluyó que puede '
@@ -368,8 +368,8 @@ IDENT = [
     'y de estrategias preventivas limita la permanencia.',
     'En la región de Puno el panorama se intensifica por las desigualdades socioeconómicas y geográficas del Altiplano '
     'y por el limitado acceso a información vocacional personalizada. La deserción y el bajo rendimiento representan '
-    'desafíos críticos para la Universidad Nacional del Altiplano (Escobar-Mamani y Cuentas Yupanqui, 2024), institución en la que la '
-    'inteligencia artificial ha mostrado potencial para mejorar el rendimiento académico (Rodriguez, 2023).',
+    'desafíos críticos para la UNA-Puno (Escobar-Mamani y Cuentas Yupanqui, 2024), institución en la que la '
+    'inteligencia artificial ha mostrado potencial para mejorar el rendimiento académico (Rodríguez Chipana, 2023).',
     'Entre las causas del problema destaca la ausencia de sistemas predictivos que aprovechen los datos académicos '
     'históricos de los postulantes: aunque la universidad y el sistema educativo regional registran los resultados de '
     'admisión y el historial de secundaria, esa información no se utiliza para orientar a quienes postulan. Sus efectos '
@@ -397,7 +397,7 @@ JUST = [
     'La deserción universitaria es un desafío serio en la educación superior peruana, especialmente en la región de '
     'Puno, donde existen marcadas desigualdades en el acceso a información y apoyo para elegir una carrera. La brecha '
     'entre las capacidades de los postulantes y las rutas educativas que eligen incide en la deserción y en la falta de '
-    'coincidencia entre habilidades, intereses y trayectorias formativas (Rodas, 2024). Con frecuencia los postulantes '
+    'coincidencia entre habilidades, intereses y trayectorias formativas (Rodas Zegarra de Escalante, 2024). Con frecuencia los postulantes '
     'eligen una carrera sin información previa adecuada, lo que conduce a su abandono o a cambios de programa.',
     'Desde el punto de vista práctico, la investigación se justifica en la necesidad de herramientas tecnológicas '
     'escalables que no solo estimen la probabilidad de éxito de un postulante, sino que ofrezcan itinerarios '
@@ -440,7 +440,7 @@ HE = [
 ]
 
 LUGAR = [
-    'La investigación se desarrolló en la Universidad Nacional del Altiplano de Puno, ubicada en la ciudad de Puno, '
+    'La investigación se desarrolló en la UNA-Puno, ubicada en la ciudad de Puno, '
     'provincia y región de Puno, Perú, a una altitud aproximada de 3 827 m s. n. m., en las coordenadas '
     '15°50′24″ S y 70°01′19″ O. La universidad es la principal institución pública de educación superior de la región '
     'y recibe postulantes de sus trece provincias, tanto de zonas urbanas como rurales.',
@@ -450,8 +450,8 @@ LUGAR = [
     'estudiar sistemas de orientación vocacional que, además de ser precisos, no reproduzcan las brechas territoriales.',
 ]
 POBL = [
-    f'La población está conformada por la totalidad de postulaciones registradas en la Universidad Nacional del '
-    f'Altiplano de Puno en los procesos de admisión comprendidos entre 2021-I y 2025-II, que suman {n(P["postulaciones"])} '
+    f'La población está conformada por la totalidad de postulaciones registradas en la UNA-Puno '
+    f'en los procesos de admisión comprendidos entre 2021-I y 2025-II, que suman {n(P["postulaciones"])} '
     f'postulaciones correspondientes a {n(P["personas"])} personas distintas, en todas las modalidades de admisión. La '
     'información se obtuvo de la Oficina de Admisión, con autorización del Vicerrectorado Académico, y del historial de '
     'educación secundaria registrado en el SIAGIE, vinculados mediante un identificador anónimo común.',
