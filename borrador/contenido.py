@@ -217,7 +217,7 @@ MARCO = [
         'La retención estudiantil comprende las estrategias institucionales y personales orientadas a que los '
         'estudiantes culminen sus estudios. Ambos aspectos dependen de factores vocacionales, académicos y '
         'tecnológicos, y pueden fortalecerse con modelos de inteligencia artificial que anticipan riesgos y '
-        'personalizan la intervención educativa (Moreira et al., 2024; Muñoz Pilozo et al., 2024).']),
+        'personalizan la intervención educativa (Muñoz Pilozo et al., 2024; Sabando Moreira y Zambrano Montenegro, 2024).']),
     ('Desempeño académico', [
         'El desempeño académico es el resultado del proceso de aprendizaje reflejado en el nivel de rendimiento del '
         'estudiante, y se mide mediante calificaciones, evaluaciones, logro de objetivos y desarrollo de competencias '
@@ -337,7 +337,7 @@ ANT_NAC = [
     'muestra de 103 estudiantes de ingeniería. Encontró una correlación inversa significativa: a mayor orientación '
     'vocacional, menor deserción, además de la influencia de factores externos, institucionales, académicos y '
     'personales.',
-    'Velasquez (2023) realizó una revisión sistemática de la literatura sobre inteligencia artificial aplicada al '
+    'Velasquez Velasquez (2023) realizó una revisión sistemática de la literatura sobre inteligencia artificial aplicada al '
     'sector educativo, siguiendo la propuesta de Kitchenham, con el fin de proporcionar una estructura para futuras '
     'investigaciones. Entre los resultados destacaron las aplicaciones de tutores inteligentes.',
 ]
