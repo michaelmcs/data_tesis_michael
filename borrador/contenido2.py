@@ -198,7 +198,7 @@ RES_INTRO = ('Los resultados se presentan por objetivo específico. En primer lu
 
 # ------------------------------------------------------------ resultados del modelo de lenguaje
 import math as _m, re as _re2
-LL = json.load(open(S + 'resultados_llm.json')); GEN = pd.read_csv(S + 'generaciones.csv')
+LL = json.load(open(S + 'resultados_llm.json')); GEN = pd.read_csv(S + 'generaciones.csv').fillna('')
 LC = LL['config']; LT = LL['entrenamiento']; LM = LL['metricas']; LP = LL['pruebas']
 NE = LC['n_eval']
 CB, CS, CH = 'LLM base sin ajuste', 'LLM + LoRA sin componente tabular', 'CareER-GPT híbrido'
@@ -214,11 +214,16 @@ ent_rows = [[et, n(LT[k]['parametros_entrenables']), f'{LT[k]["minutos"]:.1f}', 
 met_rows = [[ET[c], ci(LM[c]['rougeL']), ci(LM[c]['bertscore']), ci(LM[c]['coherencia']), ci(LM[c]['combinada'])]
             for c in (CB, CS, CH)]
 H3 = LP['H3']; K3 = round(H3['coherencia'] * H3['n'])
-def _r(w):  # tamaño del efecto r de la prueba de Wilcoxon a partir de la aproximación normal
-    z = (w - NE * (NE + 1) / 4) / _m.sqrt(NE * (NE + 1) * (2 * NE + 1) / 24); return z, abs(z) / _m.sqrt(NE)
+def _r(w, n_):  # tamaño del efecto r de la prueba de Wilcoxon a partir de la aproximación normal
+    z = (w - n_ * (n_ + 1) / 4) / _m.sqrt(n_ * (n_ + 1) * (2 * n_ + 1) / 24); return z, abs(z) / _m.sqrt(n_)
+# Wilcoxon descarta las diferencias nulas: el híbrido coincide con la referencia en todos los pares que lo hacen,
+# por lo que solo hay diferencia cero cuando el rival también reproduce la referencia
+_col = {CB: 'base', CS: 'solo_llm'}
 H4 = {}
 for c in (CB, CS):
-    t = LP['H4_vs_' + c]; z, r = _r(t['estadistico']); H4[c] = dict(t, z=z, r=r)
+    t = LP['H4_vs_' + c]
+    n_ef = NE - int(((GEN[_col[c]].str.strip() == GEN.referencia.str.strip()) & (GEN.hibrido.str.strip() == GEN.referencia.str.strip())).sum())
+    z, r = _r(t['estadistico'], n_ef); H4[c] = dict(t, z=z, r=r, n_ef=n_ef)
 h4_rows = [[ET[c], f'{LM[CH]["combinada"][0]:.3f}', f'{LM[c]["combinada"][0]:.3f}', f'{H4[c]["mejora_pct"]:.1f}',
             n(H4[c]['estadistico']), pv(H4[c]['p']), f'{H4[c]["r"]:.3f}']
            for c in (CB, CS)]
@@ -389,7 +394,7 @@ RES = [
         + ('En consecuencia, se acepta la hipótesis específica 3. ' if H3['p'] < .05 and H3['coherencia'] > .8 else
            'En consecuencia, se rechaza la hipótesis específica 3. ') +
         f'Cabe precisar que el modelo ajustado sin el componente tabular alcanzó una coherencia de '
-        f'{LM[CS]["coherencia"][0]:.3f}, lo que muestra que la coherencia depende de que el modelo reciba el ranking.'),
+        f'{LM[CS]["coherencia"][0]:.3f}; la diferencia con la arquitectura híbrida corresponde al aporte del ranking.'),
  ('h3', 'Objetivo específico 4: integración y validación comparativa'),
  ('h4', 'Calidad del rankeo de programas'),
  ('p4', f'Se evaluó el rankeo sobre {n(RJ["n"])} ingresantes, con un promedio de {RJ["candidatos_medio"]:.1f} programas '
@@ -426,12 +431,15 @@ RES = [
         'normal según la prueba de Shapiro-Wilk (p < .001), por lo que se aplicó la prueba de rangos con signo de '
         f'Wilcoxon unilateral. La arquitectura híbrida superó al modelo base en {H4[CB]["mejora_pct"]:.1f} % y al modelo '
         f'ajustado sin componente tabular en {H4[CS]["mejora_pct"]:.1f} %, en ambos casos con p < .001 y un tamaño del '
-        f'efecto grande (r = {H4[CS]["r"]:.3f}).'),
+        f'efecto grande ('
+        + (f'r = {H4[CB]["r"]:.3f} en ambas comparaciones' if f'{H4[CB]["r"]:.3f}' == f'{H4[CS]["r"]:.3f}'
+           else f'r = {H4[CB]["r"]:.3f} y r = {H4[CS]["r"]:.3f}, respectivamente') + ').'),
  ('tbl4', 'Contraste de la mejora de la arquitectura híbrida frente a cada modelo individual',
   ['Comparación frente a', 'Híbrido', 'Rival', 'Mejora (%)', 'W', 'p', 'r'], h4_rows,
   f'Valores medios de la métrica combinada sobre {NE} pares. Prueba de rangos con signo de Wilcoxon unilateral para '
   'muestras relacionadas, aplicada porque las diferencias no siguieron una distribución normal según la prueba de '
-  'Shapiro-Wilk (p < .001). r: tamaño del efecto calculado como z dividido entre la raíz cuadrada de n.', [2085, 850, 800, 900, 900, 800, 750]),
+  'Shapiro-Wilk (p < .001). r: tamaño del efecto calculado como z dividido entre la raíz cuadrada de n, excluidos '
+  'los pares con diferencia nula.', [2085, 850, 800, 900, 900, 800, 750]),
  ('p4', 'Contraste de la hipótesis específica 4. '
         + (f'En la calidad de las rutas generadas, la arquitectura híbrida superó a cada modelo individual en más del '
            f'10 % con diferencias estadísticamente significativas, por lo que se acepta la hipótesis específica 4 en '
@@ -488,7 +496,10 @@ DISC = [
     f'La comparación entre condiciones muestra que el aporte del componente tabular no está en la forma del texto, que '
     f'el modelo aprendió aun sin probabilidades, con un ROUGE-L de {LM[CS]["rougeL"][0]:.3f}, sino en su contenido: '
     f'sin el ranking, la coherencia descendió a {LM[CS]["coherencia"][0]:.3f}, y con él alcanzó '
-    f'{LM[CH]["coherencia"][0]:.3f}. Este hallazgo coincide con Martínez Sixto et al. (2025), quienes encontraron que la '
+    f'{LM[CH]["coherencia"][0]:.3f}. Que el modelo sin probabilidades acierte el orden en el '
+    f'{LM[CS]["coherencia"][0] * 100:.1f} % de los casos sugiere que el ranking puede inferirse en buena medida a partir '
+    'del área de interés del perfil, lo que es coherente con el hallazgo del rankeo: la probabilidad de ingreso depende '
+    'más del programa que del perfil individual. Este hallazgo coincide con Martínez Sixto et al. (2025), quienes encontraron que la '
     'efectividad de un modelo de lenguaje depende en gran medida de la calidad y relevancia del contexto que recibe, '
     'y respalda lo planteado por Millan (2025) sobre la ventaja de los enfoques híbridos. En cambio, matiza lo '
     'señalado por Castejon (2025), para quien una ingeniería de instrucciones adecuada elimina las alucinaciones: el '
@@ -519,7 +530,7 @@ CONCL = [
     f'(prueba binomial exacta, p {"< .001" if H3["p"] < .001 else "= " + pv(H3["p"])}), con un ROUGE-L de '
     f'{LM[CH]["rougeL"][0]:.3f} y un BERTScore F1 de {LM[CH]["bertscore"][0]:.3f}, por lo que '
     + ('se acepta' if H3['p'] < .05 and H3['coherencia'] > .8 else 'se rechaza') + ' la hipótesis específica 3. La '
-    'coherencia depende de que el modelo reciba el ranking del componente tabular: sin él, descendió a '
+    'coherencia alcanza su valor máximo cuando el modelo recibe el ranking del componente tabular: sin él, fue de '
     f'{LM[CS]["coherencia"][0]:.3f}.',
     f'En la validación comparativa, el componente de rankeo superó al orden aleatorio, con un MRR de {f3(rx.MRR)} frente '
     f'a {f3(ra.MRR)}, pero no al orden por popularidad del programa, que alcanzó {f3(rp_.MRR)}'
