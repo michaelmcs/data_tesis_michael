@@ -1,4 +1,5 @@
 import copy, re, os, shutil, zipfile
+import re as _re
 from lxml import etree
 from PIL import Image
 from contenido2 import *
@@ -99,7 +100,9 @@ def celda(contenido, ancho, enc=False, ultima=False, primera=False, sz=None, izq
         if sz:  # espaciado simple en tablas de texto denso
             sp = etree.SubElement(pp, W + 'spacing'); sp.set(W + 'after', '0'); sp.set(W + 'line', '240'); sp.set(W + 'lineRule', 'auto')
         etree.SubElement(pp, W + 'jc').set(W + 'val', 'center' if (enc or not izq) else 'left')
-        negrita = enc or (isinstance(contenido, list) and ln.endswith(':'))
+        # subtítulo dentro de una celda: línea breve que termina en dos puntos y no es una viñeta ni un elemento numerado
+        negrita = enc or (isinstance(contenido, list) and ln.endswith(':') and len(ln) < 45
+                          and not _re.match(r'^[•\d]', ln))
         p.append(run(ln, b=negrita, sz=sz))
     return tc
 def tabla(enc, filas, nivel, anchos=None, sz=None, izq_todo=False, ancho_total=8503):
@@ -381,10 +384,21 @@ for it in RES:
         nuevos += [titulo('Tabla', it[1], 'L4'), tabla(it[2], it[3], 'L4', anchos=[1900, 5185], sz=20, izq_todo=True),
                    nota(it[4], 'L4')]
     elif k == 'par':
+        # el par se presenta segmentado con viñetas para facilitar su lectura
+        def _cap(t): t = t.strip(); return t[:1].upper() + t[1:]
+        _perfil, _resto = EJ['instruction'].split('. Probabilidades estimadas de ingreso: ')
+        _perfil = _perfil.replace('Perfil del postulante: ', '', 1)
+        _probs, _tarea = _resto.split('. Genera ')
+        _instr = (['Perfil del postulante:'] + ['• ' + _cap(x) for x in _perfil.split('; ')]
+                  + ['Probabilidades estimadas de ingreso:'] + ['• ' + x.strip() for x in _probs.split('; ')]
+                  + ['Solicitud:', '• Genera ' + _tarea.strip()])
+        _resp = ['• ' + x for x in _re.split(r'(?<=\.)\s+(?=[A-ZÁÉÍÓÚÑ])', EJ['output'].strip())]
         nuevos += [titulo('Tabla', 'Ejemplo de par de instrucción y respuesta del corpus CareER-Dataset', 'L3'),
-                   tabla(['Componente', 'Contenido'], [['Instrucción', EJ['instruction']], ['Respuesta de referencia', EJ['output']]],
+                   tabla(['Componente', 'Contenido'], [['Instrucción', _instr], ['Respuesta de referencia', _resp]],
                          'L3', anchos=[1794, 6000], sz=20, izq_todo=True),
-                   nota('Par correspondiente a la partición de entrenamiento. Elaboración propia.', 'L3')]
+                   nota('Par correspondiente a la partición de entrenamiento. En el corpus, la instrucción y la respuesta '
+                        'son párrafos continuos. Aquí se presentan por elementos para facilitar su lectura. '
+                        'Elaboración propia.', 'L3')]
 insertar_despues(b_re, nuevos)
 
 b_con = buscar('CONCLUSIONES', 'TITLE01'); eliminar_entre(b_di, b_con)

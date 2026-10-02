@@ -10,7 +10,7 @@ METODOS = [
     'numéricas, entre ellas los promedios por área curricular de tercero a quinto de secundaria, el promedio de quinto '
     'grado, la tendencia de las notas, las áreas desaprobadas, la repitencia, los perfiles cuantitativo y verbal, la '
     'edad, los años desde el egreso, las postulaciones previas, los índices de servicios básicos y de equipamiento '
-    'tecnológico del hogar y la tasa previa de ingreso del programa; y 26 categóricas, entre ellas el tipo de proceso, '
+    'tecnológico del hogar y la tasa previa de ingreso del programa. Además, se emplearon 26 categóricas, entre ellas el tipo de proceso, '
     'el programa postulado, el área y la gestión del colegio, la UGEL, la lengua materna, el nivel educativo y la '
     'ocupación de los padres, el rango de ingreso familiar y la preparación preuniversitaria.',
     'Se excluyeron de los predictores el puntaje total, los puntajes por componente, las respuestas por curso, los '
@@ -19,7 +19,7 @@ METODOS = [
     'procesos anteriores al de cada postulación.']),
   ('Descripción detallada del uso de materiales, equipos e insumos', [
     'Los insumos fueron las bases de admisión y del SIAGIE. El historial escolar, registrado en formato largo con un '
-    'registro por grado, se transformó a formato ancho con una fila por estudiante; en los grados repetidos se conservó '
+    'registro por grado, se transformó a formato ancho con una fila por estudiante, y en los grados repetidos se conservó '
     'el último año cursado. Las calificaciones en escala literal se utilizaron en su equivalente vigesimal. El '
     'procesamiento se realizó en Python 3 con las bibliotecas Pandas, NumPy, SciPy, Scikit-learn y XGBoost, en una '
     'estación de trabajo con 16 GB de memoria RAM.',
@@ -32,7 +32,7 @@ METODOS = [
     'Para identificar las variables asociadas al ingreso se aplicó la prueba U de Mann-Whitney en las variables '
     'numéricas (Mann y Whitney, 1947), con el delta de Cliff como tamaño del efecto (Cliff, 1993):',
     ('eq', 'CLIFF'),
-    'donde x_i y y_j son las observaciones de ingresantes y no ingresantes, y n₁ y n₂ los tamaños de cada grupo; '
+    'donde x_i y y_j son las observaciones de ingresantes y no ingresantes, y n₁ y n₂ los tamaños de cada grupo. Los '
     'valores absolutos de 0.147, 0.33 y 0.474 delimitan efectos pequeños, medianos y grandes. En las variables '
     'categóricas se aplicó la prueba chi cuadrado de independencia, con la V de Cramér (Cramér, 1946):',
     ('eq', 'CRAMER'),
@@ -61,7 +61,7 @@ METODOS = [
     'educativa sugerida. Las variables evaluadas fueron la representatividad del corpus, su coherencia y su balance '
     'entre particiones.']),
   ('Descripción detallada del uso de materiales, equipos e insumos', [
-    'Las variables numéricas se tradujeron a descriptores verbales; por ejemplo, un promedio igual o mayor a 16 se '
+    'Las variables numéricas se tradujeron a descriptores verbales. Por ejemplo, un promedio igual o mayor a 16 se '
     'describió como alto desempeño, de 13 a menos de 16 como desempeño satisfactorio, de 11 a menos de 13 como '
     'desempeño en proceso y menor a 11 como desempeño en inicio. Para cada persona se tomó su postulación más reciente '
     'y se estimó con el modelo tabular la probabilidad de ingreso en los diez programas más demandados de su área '
@@ -91,7 +91,7 @@ METODOS = [
     '2 × 10⁻⁴ con programación coseno y calentamiento del 3 %, optimizador AdamW paginado de 8 bits, precisión mixta '
     'y longitud máxima de 512 elementos.',
     'Cada par se formateó con la plantilla de conversación del modelo, con un mensaje de sistema que define el rol de '
-    'orientador vocacional, la instrucción como mensaje del usuario y la ruta de referencia como respuesta; la pérdida '
+    'orientador vocacional, la instrucción como mensaje del usuario y la ruta de referencia como respuesta. La pérdida '
     'se calculó únicamente sobre la respuesta. La Figura 3 resume el proceso. Al finalizar, los adaptadores se '
     'guardaron por separado y pueden fusionarse con el modelo base para la inferencia.',
     ('fig', 'fig_entrenamiento.png', 'Proceso de ajuste fino del modelo de lenguaje con QLoRA',
@@ -138,8 +138,8 @@ METODOS = [
     ('eq', 'MRR'),
     'Se reportan además los aciertos en la primera posición y entre las tres primeras.',
     'Para la calidad de las rutas se comparan tres condiciones sobre la misma partición de prueba: el modelo de '
-    'lenguaje base sin ajuste, que recibe el perfil y el ranking; el modelo ajustado con LoRA sin el componente '
-    'tabular, entrenado y evaluado con el perfil pero sin las probabilidades; y la arquitectura híbrida CareER-GPT, '
+    'lenguaje base sin ajuste, que recibe el perfil y el ranking, el modelo ajustado con LoRA sin el componente '
+    'tabular, entrenado y evaluado con el perfil pero sin las probabilidades, y la arquitectura híbrida CareER-GPT, '
     'ajustada con LoRA y alimentada con el ranking calibrado. Para cada ruta se calcula una métrica combinada como el '
     'promedio de ROUGE-L, BERTScore F1 y coherencia. Los experimentos se registran con control de versiones en Git.']),
   ('Aplicación de prueba estadística inferencial', [
@@ -228,12 +228,20 @@ h4_rows = [[ET[c], f'{LM[CH]["combinada"][0]:.3f}', f'{LM[c]["combinada"][0]:.3f
             n(H4[c]['estadistico']), pv(H4[c]['p']), f'{H4[c]["r"]:.3f}']
            for c in (CB, CS)]
 H4_OK = all(H4[c]['mejora_pct'] >= 10 and H4[c]['p'] < .05 for c in (CB, CS))
-def _limpio(t, k=60):
-    t = _re2.sub(r'[*#]+', '', str(t)); t = _re2.sub(r'\s+', ' ', t).strip(); w = t.split()
-    return ' '.join(w[:k]) + (' [...]' if len(w) > k else '')
+def _frases(t):  # una viñeta por oración
+    return ['• ' + x for x in _re2.split(r'(?<=\.)\s+(?=[A-ZÁÉÍÓÚÑ])', _re2.sub(r'\s+', ' ', str(t)).strip())]
+def _lineas(t):  # respeta la estructura de listas del modelo base y descarta el elemento final incompleto
+    out = []
+    for ln in str(t).replace('**', '').splitlines():
+        ln = ln.strip()
+        if not ln: continue
+        ln = _re2.sub(r'^[-*]\s+', '• ', ln)
+        out.append(ln)
+    if out and len(_re2.sub(r'[\d.•\s]', '', out[-1])) == 0: out = out[:-1]
+    return out
 _g = GEN.iloc[0]
-gen_rows = [['Respuesta de referencia', _limpio(_g.referencia)], ['LLM base sin ajuste', _limpio(_g.base)],
-            ['LLM con LoRA sin componente tabular', _limpio(_g.solo_llm)], ['CareER-GPT híbrido', _limpio(_g.hibrido)]]
+gen_rows = [['Respuesta de referencia', _frases(_g.referencia)], ['LLM base sin ajuste', _lineas(_g.base)],
+            ['LLM con LoRA sin componente tabular', _frases(_g.solo_llm)], ['CareER-GPT híbrido', _frases(_g.hibrido)]]
 IDENT_H = (GEN.hibrido.str.strip() == GEN.referencia.str.strip()).mean() * 100
 IDENT_SOLO = (GEN.solo_llm.str.strip() == GEN.referencia.str.strip()).mean() * 100
 
@@ -314,7 +322,7 @@ RES = [
         f'y el promedio de secundaria ({imp.ganancia_rel.iloc[1]:.1f} %) fueron los predictores de mayor peso, seguidos '
         f'{SIGUEN}. Estos resultados son consistentes con el análisis bivariado de las Tablas 4 y 5.'),
  ('fig4', 'Importancia relativa de los doce principales predictores del modelo XGBoost', 'fig_importancia.png',
-  'Ganancia relativa acumulada en las divisiones de los árboles; los colores indican el tipo de variable. Elaboración propia.'),
+  'Ganancia relativa acumulada en las divisiones de los árboles. Los colores indican el tipo de variable. Elaboración propia.'),
 
  ('h4', 'Equidad entre colegios rurales y urbanos'),
  ('p4', f'La Tabla 8 muestra que el modelo discrimina con similar eficacia en ambos grupos, con AUC-ROC de '
@@ -372,29 +380,30 @@ RES = [
   ['Condición', 'Parámetros entrenables', 'Tiempo (min)', 'Pérdida inicial', 'Pérdida final de entrenamiento',
    'Pérdida final de validación'], ent_rows,
   f'Pérdida de entropía cruzada calculada solo sobre la respuesta. Entrenamiento de {LC["epocas"]} época con '
-  f'{n(LC["max_train"])} pares, r = {LC["r"]}, α = {LC["alpha"]} y lote efectivo de 16 en una GPU {LL["gpu"]}.'),
+  f'{n(LC["max_train"])} pares, r = {LC["r"]}, α = {LC["alpha"]} y lote efectivo de 16 en una GPU {LL["gpu"]}.', [1285, 1150, 950, 850, 1450, 1400]),
  ('fig4', 'Pérdida de entrenamiento y de validación durante el ajuste con LoRA', 'fig_perdida.png',
   'Las líneas tenues corresponden a la pérdida de entrenamiento y las líneas con marcadores a la de validación, '
   'evaluada cada 50 pasos. Elaboración propia.'),
  ('h4', 'Calidad de las rutas generadas'),
  ('p4', f'Se generaron rutas para {NE} pares de la partición de prueba, correspondientes a personas no vistas durante '
         f'el entrenamiento. El modelo CareER-GPT obtuvo un ROUGE-L de {LM[CH]["rougeL"][0]:.3f}, un BERTScore F1 de '
-        f'{LM[CH]["bertscore"][0]:.3f} y una coherencia de {LM[CH]["coherencia"][0]:.3f}; el {IDENT_H:.1f} % de sus rutas '
+        f'{LM[CH]["bertscore"][0]:.3f} y una coherencia de {LM[CH]["coherencia"][0]:.3f}, y el {IDENT_H:.1f} % de sus rutas '
         'coincidió literalmente con la respuesta de referencia. Este resultado se explica porque las referencias del '
         'corpus se construyeron con una estructura fija a partir del ranking del componente tabular, de modo que el '
         'modelo aprendió a trasladar con exactitud las probabilidades y los programas recibidos a una ruta redactada. La '
         'Tabla 14 presenta un ejemplo de las rutas generadas en cada condición.'),
  ('tblx', 'Ejemplo de rutas generadas por condición para un postulante de la partición de prueba',
   ['Condición', 'Ruta generada'], gen_rows,
-  'Se muestran las primeras 60 palabras de cada ruta; [...] indica texto omitido. Se eliminaron los símbolos de '
-  'formato del modelo base. Elaboración propia.'),
+  'Rutas completas, presentadas por oraciones para facilitar su lectura. La respuesta del modelo base termina '
+  'incompleta porque alcanzó el máximo de 200 elementos generados. Se eliminaron sus símbolos de formato. '
+  'Elaboración propia.'),
  ('p4', f'Contraste de la hipótesis específica 3. La coherencia contextual del modelo ajustado con LoRA en la '
         f'arquitectura híbrida fue de {H3["coherencia"]:.3f}, con {K3} de {H3["n"]} rutas coherentes, valor superior al '
         f'umbral de 0.80 según la prueba binomial exacta unilateral (p {"< .001" if H3["p"] < .001 else "= " + pv(H3["p"])}). '
         + ('En consecuencia, se acepta la hipótesis específica 3. ' if H3['p'] < .05 and H3['coherencia'] > .8 else
            'En consecuencia, se rechaza la hipótesis específica 3. ') +
         f'Cabe precisar que el modelo ajustado sin el componente tabular alcanzó una coherencia de '
-        f'{LM[CS]["coherencia"][0]:.3f}; la diferencia con la arquitectura híbrida corresponde al aporte del ranking.'),
+        f'{LM[CS]["coherencia"][0]:.3f}, y la diferencia con la arquitectura híbrida corresponde al aporte del ranking.'),
  ('h3', 'Objetivo específico 4: integración y validación comparativa'),
  ('h4', 'Calidad del rankeo de programas'),
  ('p4', f'Se evaluó el rankeo sobre {n(RJ["n"])} ingresantes, con un promedio de {RJ["candidatos_medio"]:.1f} programas '
@@ -418,7 +427,7 @@ RES = [
  ('p4', f'La Tabla 17 compara las tres condiciones sobre los mismos {NE} pares de prueba. El modelo base sin ajuste '
         f'obtuvo una métrica combinada de {LM[CB]["combinada"][0]:.3f}: generó textos extensos, con formato propio y sin '
         f'respetar el orden del ranking, con una coherencia de {LM[CB]["coherencia"][0]:.3f}. El modelo ajustado sin el '
-        f'componente tabular alcanzó {LM[CS]["combinada"][0]:.3f}; reprodujo la estructura de la ruta, con un ROUGE-L de '
+        f'componente tabular alcanzó {LM[CS]["combinada"][0]:.3f}. Reprodujo la estructura de la ruta, con un ROUGE-L de '
         f'{LM[CS]["rougeL"][0]:.3f}, cercano al de 0.836 que comparten referencias de personas distintas, pero al no '
         f'conocer las probabilidades recomendó un programa distinto o en otro orden en el {(1 - LM[CS]["coherencia"][0]) * 100:.1f} % de los casos. La '
         f'arquitectura híbrida alcanzó {LM[CH]["combinada"][0]:.3f}, con intervalos de confianza que no se superponen con '
@@ -447,7 +456,7 @@ RES = [
            'En la calidad de las rutas generadas, la arquitectura híbrida no superó a cada modelo individual en al menos '
            '10 % con significación estadística, por lo que se rechaza la hipótesis específica 4 en esta dimensión. ') +
         'En la dimensión del rankeo, el ordenamiento que la arquitectura entrega es el del componente tabular, que no '
-        'superó a la referencia por popularidad; por ello, la ventaja de la integración radica en traducir el ranking '
+        'superó a la referencia por popularidad. Por ello, la ventaja de la integración radica en traducir el ranking '
         'a una ruta comprensible y fiel a las probabilidades, y no en mejorar el orden de los programas.'),
 ]
 
@@ -620,10 +629,10 @@ MATRIZ = [
   ['Específicas:'] + [f'H{i+1}. {x}' for i, x in enumerate(HE)],
   ['Específicos:'] + [f'O{i+1}. {x}' for i, x in enumerate(OE)],
   ['Dependiente:', 'Precisión en la generación y el rankeo de rutas educativas personalizadas.'],
-  ['Variable dependiente:', 'H1: AUC-ROC igual o mayor a 0.85; AUC-PR; F1.', 'H2: representatividad, coherencia y balance del corpus.',
-   'H3: ROUGE-L y BERTScore, coherencia igual o mayor a 0.80.', 'H4: NDCG@5, NDCG@10, MRR; mejora igual o mayor a 10 %.',
+  ['Variable dependiente:', 'H1: AUC-ROC igual o mayor a 0.85, AUC-PR y F1.', 'H2: representatividad, coherencia y balance del corpus.',
+   'H3: ROUGE-L y BERTScore, coherencia igual o mayor a 0.80.', 'H4: NDCG@5, NDCG@10 y MRR, con mejora igual o mayor a 10 %.',
    'Equidad: tasa de falsos negativos por área del colegio.'],
   ['Población:', f'{n(P["postulaciones"])} postulaciones de {n(P["personas"])} personas, procesos 2021-I a 2025-II.',
-   'Muestra:', f'censal; conjunto analítico de {n(P["analizables"])} postulaciones.',
-   'Técnicas e instrumentos:', 'análisis documental de registros de admisión y del SIAGIE; validación cruzada; U de Mann-Whitney, chi cuadrado, t de Student y Wilcoxon.']],
+   'Muestra:', f'censal, con un conjunto analítico de {n(P["analizables"])} postulaciones.',
+   'Técnicas e instrumentos:', 'análisis documental de registros de admisión y del SIAGIE, validación cruzada, U de Mann-Whitney, chi cuadrado, t de Student y Wilcoxon.']],
 ]
