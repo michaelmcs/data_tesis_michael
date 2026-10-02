@@ -359,7 +359,7 @@ IDENT = [
     'En América Latina la magnitud del problema es particularmente alta. Según el Banco Mundial, cerca de la mitad de '
     'la población de 25 a 29 años que inició estudios superiores no llegó a culminarlos (Ferreyra et al., 2017), y las '
     'cifras de deserción en el primer año, antes de la pandemia, rondaban el 31 % en Colombia, el 21 % en Chile y el 33 % '
-    'en el Perú (Behr, 2020).',
+    'en el Perú (Behr et al., 2020, como se citó en Escalante López et al., 2023).',
     'En el caso peruano, según el II Informe Bienal sobre la Realidad Universitaria de la SUNEDU, alrededor del 15.8 % '
     'de los estudiantes abandonó las aulas universitarias entre 2012 y 2018 (Superintendencia Nacional de Educación '
     'Superior Universitaria, 2020), y la limitada disponibilidad de herramientas de orientación vocacional basadas en '
