@@ -51,7 +51,7 @@ RESUMEN = (
     f'historial de secundaria del SIAGIE, y se analizaron {n(P["analizables"])} postulaciones de {n(P["personas_analizables"])} '
     f'personas mediante validación cruzada agrupada por persona. El modelo tabular alcanzó un AUC-ROC de {f3(H["auc"])} '
     f'(IC 95 %: {f3(H["ic_inf"])} a {f3(H["ic_sup"])}) y un AUC-PR de {f3(H["aucpr"])}, frente a una tasa base de '
-    f'{f3(M.aucpr.iloc[0])}; no alcanzó el umbral hipotético de 0.85. El promedio de quinto de secundaria, el equipamiento '
+    f'{f3(M.aucpr.iloc[0])}, sin alcanzar el umbral hipotético de 0.85. El promedio de quinto de secundaria, el equipamiento '
     'tecnológico del hogar y la preparación preuniversitaria fueron los predictores de mayor peso. Se identificó una '
     f'brecha de {E["brecha_tfn"]:.1f} puntos en la tasa de falsos negativos en perjuicio de los postulantes de colegios '
     f'rurales. En el rankeo de programas superó al azar, pero no a la ordenación por la tasa histórica de ingreso. '
@@ -69,7 +69,7 @@ ABSTRACT = (
     f'linked with secondary school records from SIAGIE, and {P["analizables"]:,} applications from '
     f'{P["personas_analizables"]:,} individuals were analyzed using person-grouped cross-validation. The tabular model '
     f'reached an AUC-ROC of {f3(H["auc"])} (95% CI: {f3(H["ic_inf"])} to {f3(H["ic_sup"])}) and an AUC-PR of '
-    f'{f3(H["aucpr"])}, against a base rate of {f3(M.aucpr.iloc[0])}; it did not reach the hypothesized threshold of 0.85. '
+    f'{f3(H["aucpr"])}, against a base rate of {f3(M.aucpr.iloc[0])}, without reaching the hypothesized threshold of 0.85. '
     'The fifth-grade average, household technological equipment and pre-university preparation were the most influential '
     f'predictors. A gap of {E["brecha_tfn"]:.1f} points in the false negative rate was found against applicants from rural '
     f'schools. In program ranking it outperformed random ordering but not ordering by historical admission rate. '
@@ -95,8 +95,8 @@ INTRO = [
     'académico de educación secundaria registrado en el SIAGIE.',
     'Metodológicamente, el estudio adoptó un enfoque cuantitativo, de tipo aplicado y diseño preexperimental. El '
     'componente tabular se evaluó mediante validación cruzada agrupada por persona, con métricas adecuadas al '
-    'desbalance de clases y con una auditoría de equidad entre colegios rurales y urbanos; el componente generativo se '
-    'evaluó con métricas de procesamiento de lenguaje natural; y la arquitectura integrada se comparó con sus '
+    'desbalance de clases y con una auditoría de equidad entre colegios rurales y urbanos. El componente generativo se '
+    'evaluó con métricas de procesamiento de lenguaje natural, y la arquitectura integrada se comparó con sus '
     'componentes individuales.',
     'El informe se organiza en cuatro capítulos. El Capítulo I presenta la revisión de literatura, con el marco teórico '
     'y los antecedentes internacionales, nacionales y locales. El Capítulo II expone el planteamiento del problema, la '
@@ -140,7 +140,7 @@ MARCO = [
          'Los pesos preentrenados permanecen congelados y solo se entrenan las matrices A y B. Elaboración propia con base en Hu et al. (2021).'),
         'QLoRA extiende este esquema cuantizando los pesos congelados del modelo base en 4 bits con el tipo de dato '
         'NormalFloat, diseñado para pesos con distribución normal, y aplicando una doble cuantización de las constantes '
-        'de escala; los adaptadores A y B se mantienen en mayor precisión (Dettmers et al., 2023).']),
+        'de escala, mientras que los adaptadores A y B se mantienen en mayor precisión (Dettmers et al., 2023).']),
     ('Modelos de lenguaje grandes', [
         'Singhal et al. (2023) definen un modelo de lenguaje grande como una forma avanzada de inteligencia artificial '
         'capaz de comprender y generar lenguaje natural a partir del entrenamiento con grandes volúmenes de texto. '
@@ -238,7 +238,7 @@ MARCO = [
         'La equidad algorítmica estudia si un modelo predictivo distribuye sus errores de manera homogénea entre grupos '
         'de población. En contextos de orientación, un indicador relevante es la tasa de falsos negativos, que mide la '
         'proporción de personas que efectivamente logran el resultado pero a quienes el modelo asigna una baja '
-        'probabilidad; una tasa mayor en un grupo implica que el sistema desalentaría de forma desproporcionada a sus '
+        'probabilidad. Una tasa mayor en un grupo implica que el sistema desalentaría de forma desproporcionada a sus '
         'integrantes con potencial. Por ello, la evaluación de modelos con fines educativos debe complementar las '
         'métricas globales con métricas desagregadas por grupo.',
         ('eq', 'TFN'),
@@ -274,7 +274,7 @@ ANT_INT = [
     'para la inclusión lingüística y la preservación cultural en idiomas con recursos limitados.',
     'Castejon (2025) diseñó, implementó y evaluó un sistema conversacional que permite consultar en lenguaje natural la '
     'información del Museo Sorolla, con preguntas estructuradas por categorías de uso. El clasificador de intención '
-    'alcanzó una precisión global de 88 % y un F1 de 0.88, con 0.94 en la clase SQL; el componente RAG obtuvo una '
+    'alcanzó una precisión global de 88 % y un F1 de 0.88, con 0.94 en la clase SQL, y el componente RAG obtuvo una '
     'relevancia de contexto de 0.98 y una fidelidad de 0.67. Concluyó que el sistema, que integra LLM, RAG y Text2SQL, '
     'funciona eficazmente y que una ingeniería de instrucciones adecuada elimina las alucinaciones.',
     'Fang et al. (2024) realizaron una revisión extensa de los modelos de lenguaje grandes aplicados a datos tabulares '
@@ -321,7 +321,7 @@ ANT_NAC = [
     'Balarezo et al. (2024) diseñaron un asistente conversacional basado en arquitectura RAG para optimizar la '
     'búsqueda, recuperación y análisis de resoluciones históricas de la Comisión de Eliminación de Barreras '
     'Burocráticas del INDECOPI. El diseño optimizó la búsqueda contextual, redujo los tiempos de revisión, análisis y '
-    'redacción, y mejoró la precisión de las respuestas frente a los buscadores tradicionales; concluyeron que su '
+    'redacción, y mejoró la precisión de las respuestas frente a los buscadores tradicionales. Concluyeron que su '
     'implementación es viable, pertinente y beneficiosa.',
     'Yatco y Jacha (2024), en la investigación "Modelo de machine learning para predicción de deserción estudiantil", '
     'desarrollaron un modelo predictivo de la deserción en el Perú con datos de la Encuesta Nacional de Hogares y una '
@@ -471,7 +471,7 @@ MUESTRA = [
     f'El conjunto analítico comprende {n(P["analizables"])} postulaciones de {n(P["personas_analizables"])} personas, '
     f'con una tasa de ingreso de {P["tasa_ingreso"]:.2f} %. Para la validación de los modelos, este conjunto se dividió '
     'en cinco pliegues estratificados y agrupados por persona, de modo que ninguna persona aparezca simultáneamente en '
-    'entrenamiento y prueba; para el modelo de lenguaje, los pares se dividieron en 70 % para entrenamiento, 15 % para '
+    'entrenamiento y prueba. Para el modelo de lenguaje, los pares se dividieron en 70 % para entrenamiento, 15 % para '
     'validación y 15 % para prueba, también agrupados por persona.',
 ]
 METODO = [
@@ -483,7 +483,7 @@ METODO = [
     'algorítmica entre zonas rurales y urbanas. Se consideraron como variables intervinientes la calidad del conjunto '
     'de datos histórico y la capacidad computacional disponible.',
     'La Figura 2 presenta la arquitectura propuesta. El componente tabular estima, para cada postulante, la '
-    'probabilidad de ingreso en cada programa, la calibra y ordena los programas; ese ordenamiento se incorpora a la '
+    'probabilidad de ingreso en cada programa, la calibra y ordena los programas. Ese ordenamiento se incorpora a la '
     'instrucción que recibe el componente lingüístico, un modelo de lenguaje ajustado con LoRA que genera la ruta '
     'educativa en lenguaje natural.',
     ('fig', 'fig_arquitectura.png', 'Arquitectura híbrida CareER-GPT',
