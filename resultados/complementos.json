@@ -1,0 +1,7 @@
+{
+  "auc_verificado": 0.7538128118313427,
+  "brier_sin": 0.19355897034076652,
+  "brier_con": 0.09157710987559643,
+  "decil_sup_estimada": 0.7854734129454425,
+  "decil_sup_observada": 0.3349146110056926
+}

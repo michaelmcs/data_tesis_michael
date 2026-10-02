@@ -254,6 +254,29 @@ ABSTRACT = ABSTRACT.replace('[Complete with the results of LoRA fine-tuning and 
     f'threshold, and the hybrid architecture outperformed the fine-tuned model without the tabular component by '
     f'{H4[CS]["mejora_pct"]:.1f}% in the quality of the generated pathways (p < .001).')
 
+# ------------------------------------------------------------ caracterización y complementos
+TCAR = pd.read_csv(S + 't_caracterizacion.csv'); TTP = pd.read_csv(S + 't_tasa_promedio.csv')
+CJ = json.load(open(S + 'complementos.json'))
+_NOM = {'Femenino': 'Femenino', 'Masculino': 'Masculino', 'URBANA': 'Urbana', 'RURAL': 'Rural', 'PÚBLICA': 'Pública',
+        'PRIVADA': 'Privada', 'PÚBLICA DE GESTIÓN PRIVADA': 'Pública de gestión privada', 'CASTELLANO': 'Castellano',
+        'QUECHUA': 'Quechua', 'AIMARA': 'Aimara', 'ACADEMIA PARTICULAR': 'Academia particular', 'CEPREUNA': 'CEPREUNA',
+        'AUTOESTUDIO': 'Autoestudio', 'NINGUNA': 'Ninguna', 'CEPREUNA PREVIO': 'CEPREUNA en un ciclo previo',
+        'SOCIALES': 'Sociales', 'INGENIERÍAS': 'Ingenierías', 'BIOMÉDICAS': 'Biomédicas', 'No registrado': 'No registrado'}
+car_rows = []
+for _v, _g in TCAR.groupby('variable', sort=False):
+    car_rows.append([_v + ':', '', '', ''])
+    car_rows += [['   ' + _NOM.get(r.categoria, r.categoria.capitalize()), n(r.n), f'{r.pct:.1f}', f'{r.tasa:.2f}']
+                 for r in _g.itertuples()]
+def _c(var, cat): return TCAR[(TCAR.variable == var) & (TCAR.categoria == cat)].iloc[0]
+_fem, _masc = _c('Sexo', 'Femenino'), _c('Sexo', 'Masculino')
+_rur, _urb = _c('Área del colegio', 'RURAL'), _c('Área del colegio', 'URBANA')
+_pub = _c('Gestión del colegio', 'PÚBLICA')
+_qu, _ai = _c('Lengua materna', 'QUECHUA'), _c('Lengua materna', 'AIMARA')
+_prep = TCAR[(TCAR.variable == 'Preparación preuniversitaria') & (TCAR.categoria != 'No registrado')]
+_pmax, _pmin = _prep.loc[_prep.tasa.idxmax()], _prep.loc[_prep.tasa.idxmin()]
+_area = TCAR[TCAR.variable == 'Área del programa postulado']; _amax = _area.loc[_area.tasa.idxmax()]
+_t = TTP.set_index('tramo')
+
 RES = [
  ('h3', 'Caracterización de la población de estudio'),
  ('p3', f'El conjunto analítico comprendió {n(P["analizables"])} postulaciones, de las cuales {n(P["ingresantes"])} '
@@ -269,9 +292,23 @@ RES = [
  ('tbl3', 'Postulaciones e ingresantes por modalidad de admisión, Universidad Nacional del Altiplano, 2021-I a 2025-II',
   ['Modalidad', 'Postulaciones', 'Ingresantes', 'Tasa de ingreso (%)'], tr_rows, 'Elaboración propia.'),
 
+ ('p3', f'La Tabla 4 describe las características de las postulaciones analizadas. El {_fem.pct:.1f} % correspondió a '
+        f'mujeres y el {_masc.pct:.1f} % a varones, con tasas de ingreso similares, de {_fem.tasa:.2f} % y {_masc.tasa:.2f} %. '
+        f'El {_pub.pct:.1f} % procedió de colegios públicos y el {_rur.pct:.1f} % de colegios rurales, cuya tasa de ingreso '
+        f'fue de {_rur.tasa:.2f} %, frente a {_urb.tasa:.2f} % en los urbanos. El {_qu.pct + _ai.pct:.1f} % declaró una lengua '
+        'materna originaria, quechua o aimara, sin diferencias marcadas en el ingreso. La mayor diferencia se observó '
+        f'según la preparación preuniversitaria: quienes se prepararon en {_NOM[_pmax.categoria]} alcanzaron una tasa de '
+        f'{_pmax.tasa:.2f} %, frente a {_pmin.tasa:.2f} % de quienes no tuvieron preparación. Por área, el ingreso fue mayor '
+        f'en {_NOM[_amax.categoria].lower()}, con {_amax.tasa:.2f} %, lo que refleja diferencias en la relación entre '
+        'vacantes y postulantes de cada área.'),
+ ('tbl3', 'Características de las postulaciones analizadas y tasa de ingreso según grupo, 2021-I a 2025-II',
+  ['Variable y categoría', 'Postulaciones', '%', 'Tasa de ingreso (%)'], car_rows,
+  f'Porcentajes respecto de las {n(P["analizables"])} postulaciones del conjunto analítico. "No registrado" agrupa los '
+  'valores faltantes. Elaboración propia con datos de la Oficina de Admisión de la UNA-Puno y del SIAGIE.'),
+
  ('h3', 'Objetivo específico 1: modelo tabular para el rankeo de probabilidades'),
  ('h4', 'Variables asociadas al ingreso'),
- ('p4', 'La Tabla 4 muestra que los ingresantes presentaron promedios de secundaria significativamente mayores que '
+ ('p4', 'La Tabla 5 muestra que los ingresantes presentaron promedios de secundaria significativamente mayores que '
         f'los no ingresantes en todas las áreas curriculares (p < .001). El mayor tamaño del efecto correspondió al '
         f'promedio de quinto grado, con un delta de Cliff de {TN.delta.iloc[0]:.3f}, magnitud media, seguido del '
         f'promedio de secundaria ({TN.delta.iloc[1]:.3f}). Los ingresantes acumularon también menos áreas '
@@ -280,7 +317,7 @@ RES = [
  ('tbl4', 'Comparación de variables numéricas según resultado de admisión, 2021-I a 2025-II',
   ['Variable', 'Ingresó, media (DE)', 'No ingresó, media (DE)', 'p', 'Delta de Cliff'], num_rows,
   'Prueba U de Mann-Whitney. Calificaciones en escala vigesimal. DE: desviación estándar.'),
- ('p4', f'Entre las variables categóricas (Tabla 5), la preparación preuniversitaria mostró la asociación más fuerte '
+ ('p4', f'Entre las variables categóricas (Tabla 6), la preparación preuniversitaria mostró la asociación más fuerte '
         f'con el ingreso (V = {TC.V.iloc[0]:.3f}), seguida del acceso a internet, el estudio previo en CEPREUNA y la '
         'disponibilidad de computadora en el hogar. El área y la gestión del colegio y el ingreso familiar se '
         'asociaron de forma significativa pero débil, mientras que el sexo, la lengua materna y el nivel educativo de '
@@ -288,9 +325,20 @@ RES = [
         'recursos de preparación y tecnológicos son los factores que mejor diferencian a los ingresantes.'),
  ('tbl4', 'Asociación entre variables categóricas y resultado de admisión, 2021-I a 2025-II',
   ['Variable', 'Chi cuadrado', 'gl', 'p', 'V de Cramér'], cat_rows, 'Prueba chi cuadrado de independencia. gl: grados de libertad.'),
+ ('p4', 'La Figura 4 muestra que la tasa de ingreso crece de forma sostenida con el promedio de quinto de secundaria: '
+        f'pasa de {_t.loc["12", "tasa"]:.1f} % en quienes obtuvieron 12 a {_t.loc["14", "tasa"]:.1f} % con 14, '
+        f'{_t.loc["15", "tasa"]:.1f} % con 15 y {_t.loc["16 o más", "tasa"]:.1f} % con 16 o más, es decir, '
+        f'{_t.loc["16 o más", "tasa"] / (P["tasa_ingreso"]):.1f} veces la tasa global. Ningún postulante con promedio menor '
+        'a 12 ingresó. Esta relación gradual, sin saltos abruptos, anticipa que el promedio de quinto grado sea el '
+        'predictor de mayor peso del modelo, y muestra a la vez que incluso en el tramo más alto la mayoría no ingresa, '
+        'lo que limita la capacidad de cualquier modelo basado solo en el historial escolar.'),
+ ('fig4', 'Tasa de ingreso según el promedio de quinto de secundaria, 2021-I a 2025-II', 'fig_tasa_promedio.png',
+  'Promedio anual de quinto grado en escala vigesimal, agrupado por su parte entera. Los extremos con pocos casos se '
+  'agrupan en "Menos de 12" y "16 o más". La línea punteada indica la tasa global. Elaboración propia con datos de la '
+  'UNA-Puno y del SIAGIE.'),
 
  ('h4', 'Desempeño predictivo del modelo'),
- ('p4', f'La Tabla 6 compara el modelo XGBoost con las referencias. El clasificador trivial, que predice siempre que el '
+ ('p4', f'La Tabla 7 compara el modelo XGBoost con las referencias. El clasificador trivial, que predice siempre que el '
         f'postulante no ingresa, obtiene una exactitud de {M.exactitud.iloc[0]*100:.2f} % sin identificar a ningún '
         'ingresante, lo que demuestra que la exactitud no es una métrica adecuada en este problema. El XGBoost alcanzó '
         f'un AUC-ROC de {f3(xg.auc)} y un AUC-PR de {f3(xg.aucpr)}, equivalente a {xg.aucpr/M.aucpr.iloc[0]:.1f} veces la '
@@ -300,11 +348,11 @@ RES = [
   ['Métrica', 'Clasificador trivial', 'Regresión logística', 'XGBoost'], mod_rows,
   f'Predicciones fuera de pliegue de {n(P["analizables"])} postulaciones. Precisión, sensibilidad y F1 en el umbral que '
   'maximiza el F1 de cada modelo. El clasificador trivial predice siempre que el postulante no ingresa.'),
- ('p4', f'La Tabla 7 muestra que el desempeño fue estable entre pliegues, con una desviación estándar del AUC-ROC de '
+ ('p4', f'La Tabla 8 muestra que el desempeño fue estable entre pliegues, con una desviación estándar del AUC-ROC de '
         f'{H["auc_de"]:.4f}. La regresión logística obtuvo un AUC-ROC ligeramente superior al del XGBoost, con una '
         f'diferencia media de {abs(H["mejora_vs_lr"]):.4f} que, '
         f'{"aunque estadísticamente significativa" if H["p_vs_lr"] < .05 else "sin significación estadística"} (t(4) = '
-        f'{H["t_vs_lr"]:.2f}, p = {pv(H["p_vs_lr"])}), carece de relevancia práctica. La Figura 4 presenta las curvas '
+        f'{H["t_vs_lr"]:.2f}, p = {pv(H["p_vs_lr"])}), carece de relevancia práctica. La Figura 5 presenta las curvas '
         'correspondientes.'),
  ('tbl4', 'AUC-ROC y AUC-PR por pliegue de validación cruzada',
   ['Pliegue', 'n', 'AUC-ROC XGB', 'AUC-PR XGB', 'AUC-ROC RL', 'AUC-PR RL'],
@@ -318,14 +366,14 @@ RES = [
         'claramente superior al azar, pero por debajo del umbral planteado.'),
 
  ('h4', 'Importancia de las variables'),
- ('p4', f'La Figura 5 muestra que el promedio de quinto de secundaria ({imp.ganancia_rel.iloc[0]:.1f} % de la ganancia) '
+ ('p4', f'La Figura 6 muestra que el promedio de quinto de secundaria ({imp.ganancia_rel.iloc[0]:.1f} % de la ganancia) '
         f'y el promedio de secundaria ({imp.ganancia_rel.iloc[1]:.1f} %) fueron los predictores de mayor peso, seguidos '
-        f'{SIGUEN}. Estos resultados son consistentes con el análisis bivariado de las Tablas 4 y 5.'),
+        f'{SIGUEN}. Estos resultados son consistentes con el análisis bivariado de las Tablas 5 y 6.'),
  ('fig4', 'Importancia relativa de los doce principales predictores del modelo XGBoost', 'fig_importancia.png',
   'Ganancia relativa acumulada en las divisiones de los árboles. Los colores indican el tipo de variable. Elaboración propia.'),
 
  ('h4', 'Equidad entre colegios rurales y urbanos'),
- ('p4', f'La Tabla 8 muestra que el modelo discrimina con similar eficacia en ambos grupos, con AUC-ROC de '
+ ('p4', f'La Tabla 9 muestra que el modelo discrimina con similar eficacia en ambos grupos, con AUC-ROC de '
         f'{f3(rur.auc)} en el área rural y {f3(urb.auc)} en la urbana. Sin embargo, la tasa de falsos negativos fue de '
         f'{rur.tfn:.2f} % en los colegios rurales frente a {urb.tfn:.2f} % en los urbanos, una brecha de '
         f'{E["brecha_tfn"]:.2f} puntos estadísticamente significativa (χ² = {E["chi2"]:.2f}, p < .001). Es decir, entre '
@@ -338,26 +386,37 @@ RES = [
 
  ('h4', 'Rankeo de programas'),
  ('p4', 'A partir del modelo final se estimó, para cada postulante, la probabilidad de ingreso en los programas de su '
-        'área académica, lo que permite ordenarlos. La Tabla 9 presenta un caso ilustrativo del rankeo obtenido, que '
+        'área académica, lo que permite ordenarlos. La Tabla 10 presenta un caso ilustrativo del rankeo obtenido, que '
         'constituye la entrada del modelo de lenguaje. La calibración isotónica redujo el puntaje de Brier de '
         f'{R["calibracion"]["brier_sin"]:.3f} a {R["calibracion"]["brier_con"]:.3f} y llevó la probabilidad media '
         f'estimada de {R["calibracion"]["media_sin"]:.3f} a {R["calibracion"]["media_con"]:.3f}, igual a la tasa observada, '
         'por lo que las probabilidades presentadas al postulante reflejan frecuencias reales de ingreso.'),
+ ('p4', 'La Figura 7 presenta la curva de calibración. Antes de calibrar, el modelo sobrestimaba de forma sistemática '
+        'la probabilidad de ingreso, como efecto de la ponderación de la clase minoritaria usada durante el '
+        f'entrenamiento: en el decil con mayor probabilidad estimada, en promedio {CJ["decil_sup_estimada"]:.2f}, ingresó '
+        f'solo el {CJ["decil_sup_observada"] * 100:.1f} % de los postulantes. '
+        f'Tras la calibración isotónica, la curva se superpone con la diagonal y el puntaje de Brier baja de '
+        f'{CJ["brier_sin"]:.3f} a {CJ["brier_con"]:.3f}. Dado que la calibración se ajustó sobre las mismas predicciones '
+        'fuera de pliegue que se evalúan, esta concordancia corresponde a un ajuste dentro de la muestra. En una '
+        'implementación, el calibrador debe estimarse con postulaciones de un periodo independiente.'),
+ ('fig4', 'Curva de calibración del modelo XGBoost antes y después de la calibración isotónica', 'fig_calibracion.png',
+  'Proporción observada de ingreso en diez grupos de igual tamaño ordenados por la probabilidad estimada, a partir '
+  'de las predicciones fuera de pliegue. La línea punteada indica la calibración perfecta. Elaboración propia.'),
  ('rank', None),
 
  ('h3', 'Objetivo específico 2: corpus de instrucción y respuesta'),
  ('p3', f'Se generó el corpus CareER-Dataset con {n(K["pares"])} pares de instrucción y respuesta, uno por persona. La '
-        'Tabla 10 muestra su distribución en las particiones, con longitudes medias de instrucción y respuesta '
+        'Tabla 11 muestra su distribución en las particiones, con longitudes medias de instrucción y respuesta '
         f'prácticamente idénticas entre ellas. El vocabulario de las respuestas comprende {n(K["vocab"])} términos '
         f'distintos y el programa recomendado en primer lugar abarca {K["top1_distintos"]} programas diferentes.'),
  ('tbl3', 'Distribución del corpus CareER-Dataset por partición',
   ['Partición', 'Pares', 'Palabras por instrucción (media)', 'Palabras por respuesta (media)'], cor_rows,
   'Particiones agrupadas por persona. Elaboración propia.'),
- ('p3', 'Como se observa en la Tabla 11, no se encontraron diferencias significativas entre las particiones en la '
+ ('p3', 'Como se observa en la Tabla 12, no se encontraron diferencias significativas entre las particiones en la '
         'distribución del área del colegio, el sexo ni el área del programa (p > .05), lo que confirma que el corpus '
         'está balanceado. Dado que incluye a la totalidad de personas analizables, reproduce la distribución de la '
         f'población. La coherencia fue de {K["coherencia_top1"]:.1f} %: en todos los pares el programa recomendado '
-        'coincide con el de mayor probabilidad consignado en la instrucción. La Tabla 12 presenta un par de ejemplo.'),
+        'coincide con el de mayor probabilidad consignado en la instrucción. La Tabla 13 presenta un par de ejemplo.'),
  ('tbl3', 'Balance del corpus entre particiones de entrenamiento, validación y prueba',
   ['Variable', 'Chi cuadrado', 'p'], rep_rows, 'Prueba chi cuadrado de independencia.'),
  ('par', None),
@@ -370,8 +429,8 @@ RES = [
         f'entrenamiento, durante {LC["epocas"]} época y {PH[4]} pasos de optimización. Los adaptadores LoRA sumaron '
         f'{n(LT["hibrido"]["parametros_entrenables"])} parámetros entrenables, cerca del 0.3 % del modelo, y el '
         f'entrenamiento tomó {LT["hibrido"]["minutos"]:.1f} minutos en la condición híbrida y '
-        f'{LT["solo_llm"]["minutos"]:.1f} minutos en la condición sin componente tabular. Como muestran la Tabla 13 y la '
-        f'Figura 6, en la condición híbrida la pérdida de validación descendió a {fl(PH[3])} al final del entrenamiento, '
+        f'{LT["solo_llm"]["minutos"]:.1f} minutos en la condición sin componente tabular. Como muestran la Tabla 14 y la '
+        f'Figura 8, en la condición híbrida la pérdida de validación descendió a {fl(PH[3])} al final del entrenamiento, '
         'mientras que en la condición sin componente tabular se estabilizó en '
         f'{fl(PS[3])}. La cercanía entre la pérdida de entrenamiento y la de validación en ambas condiciones indica que '
         'no hubo sobreajuste. La pérdida residual de la condición sin componente tabular corresponde a las '
@@ -391,7 +450,7 @@ RES = [
         'coincidió literalmente con la respuesta de referencia. Este resultado se explica porque las referencias del '
         'corpus se construyeron con una estructura fija a partir del ranking del componente tabular, de modo que el '
         'modelo aprendió a trasladar con exactitud las probabilidades y los programas recibidos a una ruta redactada. La '
-        'Tabla 14 presenta un ejemplo de las rutas generadas en cada condición.'),
+        'Tabla 15 presenta un ejemplo de las rutas generadas en cada condición.'),
  ('tblx', 'Ejemplo de rutas generadas por condición para un postulante de la partición de prueba',
   ['Condición', 'Ruta generada'], gen_rows,
   'Rutas completas, presentadas por oraciones para facilitar su lectura. La respuesta del modelo base termina '
@@ -407,7 +466,7 @@ RES = [
  ('h3', 'Objetivo específico 4: integración y validación comparativa'),
  ('h4', 'Calidad del rankeo de programas'),
  ('p4', f'Se evaluó el rankeo sobre {n(RJ["n"])} ingresantes, con un promedio de {RJ["candidatos_medio"]:.1f} programas '
-        'candidatos por persona. La Tabla 15 y la Figura 7 muestran que el XGBoost superó al orden aleatorio en todas las '
+        'candidatos por persona. La Tabla 16 y la Figura 9 muestran que el XGBoost superó al orden aleatorio en todas las '
         f'métricas, con un MRR de {f3(rx.MRR)} frente a {f3(ra.MRR)}, y ubicó el programa de ingreso en la primera posición '
         f'en el {rx.Hit1*100:.1f} % de los casos, frente al {ra.Hit1*100:.1f} % esperado al azar. Sin embargo, el orden por '
         f'popularidad, basado solo en la tasa histórica de ingreso de cada programa, obtuvo un MRR de {f3(rp_.MRR)}, '
@@ -418,13 +477,13 @@ RES = [
   'reportan los valores esperados exactos. Acierto@k: proporción de casos en que el programa de ingreso se ubica entre '
   'las k primeras posiciones.'),
  ('fig4', 'Comparación de las métricas de rankeo entre métodos', 'fig_ranking.png', 'Elaboración propia.'),
- ('p4', 'La Tabla 16 muestra que, a diferencia de lo observado en la clasificación, el rankeo no perjudicó a los '
+ ('p4', 'La Tabla 17 muestra que, a diferencia de lo observado en la clasificación, el rankeo no perjudicó a los '
         'postulantes de colegios rurales: sus métricas fueron iguales o ligeramente superiores a las de los urbanos.'),
  ('tbl4', 'Calidad del rankeo del XGBoost según el área del colegio de procedencia',
   ['Área', 'MRR', 'NDCG@5', 'NDCG@10', 'Acierto@1', 'Acierto@3'], rq_rows,
   'Se excluyen los ingresantes sin registro del área del colegio.'),
  ('h4', 'Calidad de las rutas generadas por la arquitectura integrada'),
- ('p4', f'La Tabla 17 compara las tres condiciones sobre los mismos {NE} pares de prueba. El modelo base sin ajuste '
+ ('p4', f'La Tabla 18 compara las tres condiciones sobre los mismos {NE} pares de prueba. El modelo base sin ajuste '
         f'obtuvo una métrica combinada de {LM[CB]["combinada"][0]:.3f}: generó textos extensos, con formato propio y sin '
         f'respetar el orden del ranking, con una coherencia de {LM[CB]["coherencia"][0]:.3f}. El modelo ajustado sin el '
         f'componente tabular alcanzó {LM[CS]["combinada"][0]:.3f}. Reprodujo la estructura de la ruta, con un ROUGE-L de '
@@ -436,7 +495,7 @@ RES = [
   ['Condición', 'ROUGE-L', 'BERTScore F1', 'Coherencia', 'Métrica combinada'], met_rows,
   f'Media e intervalo de confianza al 95 % entre corchetes, estimado mediante 1 000 remuestreos bootstrap, sobre '
   f'{NE} pares de la partición de prueba. La métrica combinada es el promedio de ROUGE-L, BERTScore F1 y coherencia.', [1685, 1350, 1350, 1350, 1350]),
- ('p4', f'La Tabla 18 presenta el contraste de la mejora. Las diferencias por par no siguieron una distribución '
+ ('p4', f'La Tabla 19 presenta el contraste de la mejora. Las diferencias por par no siguieron una distribución '
         'normal según la prueba de Shapiro-Wilk (p < .001), por lo que se aplicó la prueba de rangos con signo de '
         f'Wilcoxon unilateral. La arquitectura híbrida superó al modelo base en {H4[CB]["mejora_pct"]:.1f} % y al modelo '
         f'ajustado sin componente tabular en {H4[CS]["mejora_pct"]:.1f} %, en ambos casos con p < .001 y un tamaño del '
@@ -522,6 +581,22 @@ DISC = [
     'es la principal limitación del componente lingüístico y justifica validar las rutas con especialistas en '
     'orientación vocacional y con los propios postulantes, y ampliar el corpus con respuestas redactadas por '
     'orientadores, en línea con León Caranqui (2023), que destacó la calidad del corpus como factor clave.',
+    'El estudio presenta otras limitaciones que acotan el alcance de sus conclusiones. Primero, los predictores se '
+    'restringen a la información administrativa disponible antes del examen, sin medidas de motivación, intereses '
+    'vocacionales ni de la preparación específica para cada área, que probablemente explican parte de la variabilidad '
+    f'no capturada por el modelo. Segundo, se excluyó el {100 - P["pct_historial"]:.1f} % de postulaciones sin historial '
+    'escolar emparejable en el SIAGIE, cuyo perfil puede diferir del analizado, por lo que los resultados describen a '
+    'los postulantes con historial en la educación secundaria registrada en el SIAGIE. Tercero, los '
+    'datos provienen de una sola universidad, y la validez de la arquitectura en otras instituciones debe comprobarse. '
+    'Cuarto, las asociaciones encontradas, como la mayor tasa de ingreso de quienes se prepararon en el CEPREUNA, son '
+    'descriptivas y no permiten atribuir efectos causales, ya que quienes eligen cada modalidad de preparación pueden '
+    'diferir en otras características.',
+    'En términos prácticos, los resultados sugieren que la arquitectura puede aportar a la orientación vocacional de '
+    'la UNA-Puno si se usa como herramienta informativa y no como filtro. Las probabilidades calibradas permiten '
+    'comunicar al postulante una expectativa realista de ingreso por programa, y el componente lingüístico traduce '
+    'esa información en una ruta comprensible. Sin embargo, la brecha en la tasa de falsos negativos de los colegios '
+    'rurales obliga a acompañar cualquier uso institucional con un monitoreo periódico de las métricas de error por '
+    'grupo y con la participación de orientadores que interpreten las recomendaciones junto con el postulante.',
 ]
 
 CONCL = [
